@@ -233,3 +233,6 @@ uploads/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Sample PDFs for local testing
+samples/
