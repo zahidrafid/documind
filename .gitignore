@@ -218,3 +218,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Secrets
+.env
+
+# Node / React
+node_modules/
+dist/
+
+# Uploaded documents
+media/
+uploads/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/

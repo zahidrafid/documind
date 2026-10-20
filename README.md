@@ -1,2 +1,9 @@
-# documind
-AI document assistant that answers questions from your documents with page level citations
+# DocuMind
+
+AI document assistant that answers questions from uploaded documents, with page-level citations.
+
+## Tech stack
+Django REST Framework · React · PostgreSQL + pgvector · OpenAI API · Docker
+
+## Status
+🚧 In development
