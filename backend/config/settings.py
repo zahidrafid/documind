@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'rest_framework',
+    'rest_framework.authtoken',
+    'accounts',
     'documents',
 ]
 
@@ -142,3 +144,21 @@ MAILERS = {
 # Uploaded files (documents users upload)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# Django REST Framework: token auth for React, session auth for the browsable API.
+# Every endpoint requires login unless it explicitly allows otherwise.
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+MAX_UPLOAD_SIZE_MB = 20
+
+# After logging in to the browsable API, go to the API root instead of /accounts/profile/
+LOGIN_REDIRECT_URL = '/api/documents/'
