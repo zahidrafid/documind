@@ -316,6 +316,15 @@ def answer_question(
     user_message = f"{history_text}Sources:\n{context}\n\nQuestion: {question_text}"
     answer = chat(SYSTEM_PROMPT, user_message)
 
+    # The model refused even though chunks passed the filter: don't show sources
+    if NOT_FOUND_MESSAGE.rstrip(".").lower() in answer.lower():
+        return {
+            "answer": NOT_FOUND_MESSAGE,
+            "sources": [],
+            "search_query": search_query,
+            "queries": queries,
+        }
+
     sources = [
         {
             "number": number,

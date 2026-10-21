@@ -123,3 +123,9 @@ class SearchTests(TempMediaMixin, FakeOpenAIMixin, TestCase):
         self.assertEqual(result["sources"][0]["page"], 2)
         prompt = self.mock_chat.call_args.args[1]
         self.assertIn("[1] Syllabus, page 2", prompt)
+
+    def test_model_refusal_returns_no_sources(self):
+        self.mock_chat.return_value = NOT_FOUND_MESSAGE
+        result = answer_question("What happens with late work?", self.alice)
+        self.assertEqual(result["answer"], NOT_FOUND_MESSAGE)
+        self.assertEqual(result["sources"], [])
