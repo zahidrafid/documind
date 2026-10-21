@@ -70,6 +70,7 @@ export const api = {
     return request("/documents/", { method: "POST", body: form });
   },
   deleteDocument: (id) => request(`/documents/${id}/`, { method: "DELETE" }),
+  reprocessDocument: (id) => request(`/documents/${id}/reprocess/`, { method: "POST" }),
 
   ask: (question, documentIds) =>
     request("/ask/", {

@@ -2,17 +2,32 @@ import logging
 from pathlib import Path
 
 import openai
+from django.db import transaction
 from django.db.models import Count
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Document
 from .serializers import AskSerializer, DocumentSerializer
-from .services.ingestion import ingest_document
 from .services.qa import answer_question
+from .tasks import process_document
 
 logger = logging.getLogger(__name__)
+
+
+def enqueue_processing(document):
+    """Queue a document for background processing."""
+    try:
+        process_document.delay(document.id)
+    except Exception:
+        # Usually means Redis isn't running
+        logger.exception("Could not queue document %s", document.id)
+        Document.objects.filter(id=document.id).update(
+            status=Document.Status.FAILED,
+            error_message="Couldn't start processing. Please try again later.",
+        )
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
@@ -33,15 +48,32 @@ class DocumentViewSet(viewsets.ModelViewSet):
         title = serializer.validated_data.get("title") or Path(uploaded.name).stem
         document = serializer.save(owner=request.user, title=title[:255])
 
-        try:
-            ingest_document(document)
-        except Exception:
-            # ingest_document already saved status=failed and the error message
-            logger.exception("Ingestion failed for document %s", document.id)
+        # Queue the job only once the document is definitely saved,
+        # so the worker never looks for a row that doesn't exist yet
+        transaction.on_commit(lambda: enqueue_processing(document))
 
         document.refresh_from_db()
         return Response(
-            self.get_serializer(document).data, status=status.HTTP_201_CREATED
+            self.get_serializer(document).data, status=status.HTTP_202_ACCEPTED
+        )
+
+    @action(detail=True, methods=["post"])
+    def reprocess(self, request, pk=None):
+        document = self.get_object()  # still only finds the user's own documents
+        if document.status in (Document.Status.PENDING, Document.Status.PROCESSING):
+            return Response(
+                {"detail": "This document is already being processed."},
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        document.status = Document.Status.PENDING
+        document.error_message = ""
+        document.save(update_fields=["status", "error_message"])
+        transaction.on_commit(lambda: enqueue_processing(document))
+
+        document.refresh_from_db()
+        return Response(
+            self.get_serializer(document).data, status=status.HTTP_202_ACCEPTED
         )
 
     def perform_destroy(self, instance):

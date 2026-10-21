@@ -162,3 +162,14 @@ MAX_UPLOAD_SIZE_MB = 20
 
 # After logging in to the browsable API, go to the API root instead of /accounts/profile/
 LOGIN_REDIRECT_URL = '/api/documents/'
+
+# Celery background jobs (Redis is the message queue)
+CELERY_BROKER_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+
+# Status is tracked on the Document model, so Celery doesn't need to store results
+CELERY_TASK_IGNORE_RESULT = True
+
+# Only remove a job from the queue after it finishes. If the worker crashes
+# mid-job, the job goes back to the queue and runs again.
+CELERY_TASK_ACKS_LATE = True
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1

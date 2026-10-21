@@ -155,3 +155,13 @@ input, textarea { font: inherit; }
   .layout { flex-direction: column; }
   .sidebar { width: 100%; max-height: 40vh; border-right: none; border-bottom: 1px solid var(--border); }
 }
+
+/* Background processing status */
+.status { display: inline-flex; align-items: center; gap: 0.35rem; }
+.spinner {
+  width: 0.7rem; height: 0.7rem; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.retry-btn { align-self: flex-start; margin-top: 0.15rem; }

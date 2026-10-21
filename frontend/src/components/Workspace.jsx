@@ -20,6 +20,23 @@ export default function Workspace() {
       .finally(() => setLoading(false));
   }, []);
 
+  const hasActiveJobs = documents.some(
+    (d) => d.status === "pending" || d.status === "processing"
+  );
+
+  // While anything is queued or processing, refresh the list every 2 seconds
+  useEffect(() => {
+    if (!hasActiveJobs) return;
+    const timer = setInterval(async () => {
+      try {
+        setDocuments(await api.listDocuments());
+      } catch {
+        // Ignore one failed check; the next one will try again
+      }
+    }, 2000);
+    return () => clearInterval(timer);
+  }, [hasActiveJobs]);
+
   async function handleUpload(file) {
     setError("");
     setUploading(true);
@@ -40,6 +57,16 @@ export default function Workspace() {
       await api.deleteDocument(document.id);
       setDocuments((prev) => prev.filter((d) => d.id !== document.id));
       setSelectedIds((prev) => prev.filter((id) => id !== document.id));
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function handleRetry(document) {
+    setError("");
+    try {
+      const updated = await api.reprocessDocument(document.id);
+      setDocuments((prev) => prev.map((d) => (d.id === updated.id ? updated : d)));
     } catch (err) {
       setError(err.message);
     }
@@ -75,6 +102,7 @@ export default function Workspace() {
             selectedIds={selectedIds}
             onUpload={handleUpload}
             onDelete={handleDelete}
+            onRetry={handleRetry}
             onToggle={toggleSelected}
           />
         </aside>

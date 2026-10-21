@@ -1,5 +1,11 @@
 import { useRef } from "react";
 
+const STATUS_LABELS = {
+  pending: "Queued",
+  processing: "Processing…",
+  failed: "Failed",
+};
+
 export default function DocumentList({
   documents,
   loading,
@@ -8,6 +14,7 @@ export default function DocumentList({
   selectedIds,
   onUpload,
   onDelete,
+  onRetry,
   onToggle,
 }) {
   const fileInput = useRef(null);
@@ -27,7 +34,7 @@ export default function DocumentList({
           onClick={() => fileInput.current.click()}
           disabled={uploading}
         >
-          {uploading ? "Processing…" : "Upload PDF"}
+          {uploading ? "Uploading…" : "Upload PDF"}
         </button>
         <input
           ref={fileInput}
@@ -38,11 +45,7 @@ export default function DocumentList({
         />
       </div>
 
-      {uploading && (
-        <p className="muted small">
-          Reading and indexing your PDF. Long files can take a little while.
-        </p>
-      )}
+      {uploading && <p className="muted small">Uploading your PDF…</p>}
       {error && <p className="error">{error}</p>}
 
       {loading ? (
@@ -67,10 +70,28 @@ export default function DocumentList({
                       {doc.page_count} pages · {doc.chunk_count} chunks
                     </span>
                   ) : (
-                    <span className={`status status-${doc.status}`}>{doc.status}</span>
+                    <span className={`status status-${doc.status}`}>
+                      {(doc.status === "pending" || doc.status === "processing") && (
+                        <span className="spinner" aria-hidden="true" />
+                      )}
+                      {STATUS_LABELS[doc.status]}
+                    </span>
                   )}
-                  {doc.status === "failed" && doc.error_message && (
-                    <span className="error small">{doc.error_message}</span>
+                  {doc.error_message && doc.status !== "ready" && (
+                    <span className={doc.status === "failed" ? "error small" : "muted small"}>
+                      {doc.error_message}
+                    </span>
+                  )}
+                  {doc.status === "failed" && (
+                    <button
+                      className="btn-link small retry-btn"
+                      onClick={(event) => {
+                        event.preventDefault(); // don't toggle the checkbox
+                        onRetry(doc);
+                      }}
+                    >
+                      Retry
+                    </button>
                   )}
                 </span>
               </label>
