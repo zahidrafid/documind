@@ -52,6 +52,7 @@ def rewrite_question(question, history):
 
 CANDIDATES_PER_METHOD = 20  # how many results each search method contributes
 RRF_K = 60  # standard Reciprocal Rank Fusion constant
+MAX_DISTANCE = 0.65
 SEARCH_MODES = ("vector", "keyword", "hybrid")
 
 
@@ -102,7 +103,20 @@ def _keyword_search(chunks, question, question_vector, limit):
     )
 
 
-def search_chunks(question, user, top_k=5, document_ids=None, mode=None):
+def is_relevant(chunk, max_distance=MAX_DISTANCE):
+    """Close in meaning, or contains the question's words."""
+    return chunk.distance <= max_distance or chunk.match in ("keyword", "both")
+
+
+def search_chunks(
+    question,
+    user,
+    top_k=5,
+    document_ids=None,
+    mode=None,
+    question_vector=None,
+    candidates=CANDIDATES_PER_METHOD,
+):
     """Return the best chunks for a question, best first.
 
     Each chunk gets extra attributes:
@@ -115,15 +129,14 @@ def search_chunks(question, user, top_k=5, document_ids=None, mode=None):
         raise ValueError(f"Unknown search mode: {mode}")
 
     chunks = _user_chunks(user, document_ids)
-    question_vector = embed_texts([question])[0]
+    if question_vector is None:
+        question_vector = embed_texts([question])[0]
 
     result_lists = {}
     if mode in ("vector", "hybrid"):
-        result_lists["vector"] = _vector_search(chunks, question_vector, CANDIDATES_PER_METHOD)
+        result_lists["vector"] = _vector_search(chunks, question_vector, candidates)
     if mode in ("keyword", "hybrid"):
-        result_lists["keyword"] = _keyword_search(
-            chunks, question, question_vector, CANDIDATES_PER_METHOD
-        )
+        result_lists["keyword"] = _keyword_search(chunks, question, question_vector, candidates)
 
     # Reciprocal Rank Fusion: score = sum of 1 / (k + position) across lists
     scores, found_by, by_id = {}, {}, {}
@@ -150,12 +163,13 @@ def answer_question(
     user,
     history=None,
     top_k=5,
-    max_distance=0.65,
+    max_distance=MAX_DISTANCE,
     document_ids=None,
     mode=None,
+    rewrite=True,
 ):
     history = history or []
-    search_query = rewrite_question(question, history)
+    search_query = rewrite_question(question, history) if rewrite else question
 
     chunks = search_chunks(
         search_query, user, top_k=top_k, document_ids=document_ids, mode=mode
@@ -163,11 +177,7 @@ def answer_question(
 
     # Keep chunks that are close in meaning OR contain the question's words.
     # A chunk with an exact course code may not be close in meaning, but it's relevant.
-    relevant = [
-        chunk
-        for chunk in chunks
-        if chunk.distance <= max_distance or chunk.match in ("keyword", "both")
-    ]
+    relevant = [chunk for chunk in chunks if is_relevant(chunk, max_distance)]
     if not relevant:
         return {"answer": NOT_FOUND_MESSAGE, "sources": [], "search_query": search_query}
 

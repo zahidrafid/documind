@@ -1,0 +1,371 @@
+[
+  {
+    "id": "late-homework",
+    "type": "semantic",
+    "question": "What happens if I submit homework late?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ],
+    "notes": "Late policy is on pages 5-6 (was wrongly labeled 11)."
+  },
+  {
+    "id": "textbook-name",
+    "type": "semantic",
+    "question": "What textbook do I need?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          3,
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "id": "quiz-late",
+    "type": "semantic",
+    "question": "Can I make up a quiz if I miss the deadline?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ]
+  },
+  {
+    "id": "quiz-weight",
+    "type": "semantic",
+    "question": "How much are quizzes worth toward my grade?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          13
+        ]
+      }
+    ]
+  },
+  {
+    "id": "drop-lowest-quiz",
+    "type": "semantic",
+    "question": "Does the lowest quiz score get thrown out?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          10
+        ]
+      }
+    ]
+  },
+  {
+    "id": "weekly-hours",
+    "type": "semantic",
+    "question": "How many hours a week should I plan to spend on this class?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          4,
+          11
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ai-allowed",
+    "type": "semantic",
+    "question": "Am I allowed to use ChatGPT to help write my code?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          8,
+          9
+        ]
+      }
+    ]
+  },
+  {
+    "id": "scores-not-syncing",
+    "type": "semantic",
+    "question": "My zyBooks scores aren't showing up in Canvas. What should I do?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          5
+        ]
+      }
+    ]
+  },
+  {
+    "id": "final-exam",
+    "type": "semantic",
+    "question": "Is there a final exam?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          11
+        ]
+      }
+    ],
+    "notes": "Answer is no; the syllabus says so on page 11."
+  },
+  {
+    "id": "project-finish",
+    "type": "semantic",
+    "question": "When does the intranet project finish?",
+    "expected": [
+      {
+        "document": "case_3-3_Rafid_Gantt",
+        "pages": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "id": "course-code",
+    "type": "exact",
+    "question": "ITSE-1359",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "id": "instructor-email",
+    "type": "exact",
+    "question": "jlewis@collin.edu",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "id": "classroom",
+    "type": "exact",
+    "question": "IT302",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "id": "office-room",
+    "type": "exact",
+    "question": "IT Center 111A",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "id": "access-office",
+    "type": "exact",
+    "question": "ACCESS office phone number",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          7,
+          19
+        ]
+      }
+    ]
+  },
+  {
+    "id": "uat-signoff",
+    "type": "exact",
+    "question": "User acceptance testing signed off",
+    "expected": [
+      {
+        "document": "case_3-3_Rafid_Gantt",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "document": "case_3-3_Rafid_Network",
+        "pages": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "id": "instructor-after-late-policy",
+    "type": "follow-up",
+    "question": "Who is the instructor?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          1,
+          2
+        ]
+      }
+    ],
+    "history": [
+      {
+        "role": "user",
+        "content": "What is the late work policy?"
+      },
+      {
+        "role": "assistant",
+        "content": "The late work policy allows one participation assignment per semester to be turned in late with a 20% penalty, but you must inform the professor to get credit. Challenge assignments can also be turned in late with a 20% penalty up to one week after the due date, and the professor must manually enter the grade after you notify them. Work must be completed in zyBooks and submitted within one week of the due date, except if the due date is in the last week of the semester, when late submission is not allowed. Quizzes are not accepted late at all"
+      }
+    ],
+    "notes": "Over-rewriting bug: standalone question got extra context and retrieval failed."
+  },
+  {
+    "id": "late-policy-final-project",
+    "type": "follow-up",
+    "question": "Does that apply to the final project too?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          6,
+          11
+        ]
+      }
+    ],
+    "history": [
+      {
+        "role": "user",
+        "content": "What is the late work policy?"
+      },
+      {
+        "role": "assistant",
+        "content": "The late work policy allows one participation assignment per semester to be turned in late with a 20% penalty, but you must inform the professor to get credit. Challenge assignments can also be turned in late with a 20% penalty up to one week after the due date, and the professor must manually enter the grade after you notify them. Work must be completed in zyBooks and submitted within one week of the due date, except if the due date is in the last week of the semester, when late submission is not allowed. Quizzes are not accepted late at all"
+      }
+    ],
+    "notes": "There is no final project or exam (p11); late policy is p6."
+  },
+  {
+    "id": "office-location-after-hours",
+    "type": "follow-up",
+    "question": "Where is his office?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          2
+        ]
+      }
+    ],
+    "history": [
+      {
+        "role": "user",
+        "content": "When are the professor's office hours?"
+      },
+      {
+        "role": "assistant",
+        "content": "Online office hours are Tuesday 2:50-4:50 pm and Thursday 12:00-2:00 pm, with in-office hours on Tuesday and Thursday as well [1]."
+      }
+    ]
+  },
+  {
+    "id": "challenge-weight-after-quiz",
+    "type": "follow-up",
+    "question": "What about the challenge activities?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          13
+        ]
+      }
+    ],
+    "history": [
+      {
+        "role": "user",
+        "content": "How much are quizzes worth?"
+      },
+      {
+        "role": "assistant",
+        "content": "Quizzes are worth 35% of the final grade [1]."
+      }
+    ]
+  },
+  {
+    "id": "credit-hours-after-ai",
+    "type": "follow-up",
+    "question": "How many credit hours is this course?",
+    "expected": [
+      {
+        "document": "syllabus",
+        "pages": [
+          1
+        ]
+      }
+    ],
+    "history": [
+      {
+        "role": "user",
+        "content": "Am I allowed to use AI tools?"
+      },
+      {
+        "role": "assistant",
+        "content": "No. Using generative AI tools to complete assignments is prohibited in this course [1]."
+      }
+    ],
+    "notes": "Standalone question asked as a follow-up; should not be rewritten."
+  },
+  {
+    "id": "off-topic-capital",
+    "type": "unanswerable",
+    "question": "What is the capital of France?",
+    "expected": []
+  },
+  {
+    "id": "parking-permit",
+    "type": "unanswerable",
+    "question": "How much does a campus parking permit cost?",
+    "expected": []
+  },
+  {
+    "id": "lab-fee-amount",
+    "type": "unanswerable",
+    "question": "How much is the lab fee for this class?",
+    "expected": [],
+    "notes": "Syllabus says a lab fee exists but never gives the amount. Hard case."
+  },
+  {
+    "id": "project-budget",
+    "type": "unanswerable",
+    "question": "What is the total budget for the intranet project?",
+    "expected": [],
+    "notes": "Gantt/network show schedule only, no costs."
+  }
+]

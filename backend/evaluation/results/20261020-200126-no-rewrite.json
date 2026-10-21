@@ -1,0 +1,349 @@
+{
+  "label": "no-rewrite",
+  "settings": {
+    "modes": [
+      "vector",
+      "keyword",
+      "hybrid"
+    ],
+    "candidates": 20,
+    "rewrite": false,
+    "answers": false,
+    "chat_model": "gpt-4.1-mini",
+    "embedding_model": "text-embedding-3-small"
+  },
+  "summary": {
+    "counts": {
+      "answerable": 5,
+      "unanswerable": 1
+    },
+    "modes": {
+      "vector": {
+        "hit@1": 20.0,
+        "hit@5": 60.0,
+        "mrr": 0.392,
+        "kept@5": 40.0,
+        "rejected": 100.0
+      },
+      "keyword": {
+        "hit@1": 40.0,
+        "hit@5": 40.0,
+        "mrr": 0.458,
+        "kept@5": 40.0,
+        "rejected": 100.0
+      },
+      "hybrid": {
+        "hit@1": 20.0,
+        "hit@5": 80.0,
+        "mrr": 0.435,
+        "kept@5": 80.0,
+        "rejected": 100.0
+      }
+    },
+    "by_type": {
+      "vector": {
+        "exact": 100.0,
+        "follow-up": 50.0,
+        "semantic": 50.0
+      },
+      "keyword": {
+        "exact": 100.0,
+        "follow-up": 0.0,
+        "semantic": 50.0
+      },
+      "hybrid": {
+        "exact": 100.0,
+        "follow-up": 50.0,
+        "semantic": 100.0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "late-homework",
+      "type": "semantic",
+      "answerable": true,
+      "question": "What happens if I submit homework late?",
+      "search_query": "What happens if I submit homework late?",
+      "modes": {
+        "vector": {
+          "rank": 8,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.125,
+          "kept_hit5": false,
+          "top": [
+            "syllabus p6 vector 0.33",
+            "syllabus p5 vector 0.45",
+            "syllabus p6 vector 0.49",
+            "syllabus p12 vector 0.50",
+            "syllabus p5 vector 0.50"
+          ]
+        },
+        "keyword": {
+          "rank": 8,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.125,
+          "kept_hit5": false,
+          "top": [
+            "syllabus p6 keyword 0.49",
+            "syllabus p8 keyword 0.51",
+            "syllabus p14 keyword 0.59",
+            "syllabus p5 keyword 0.50",
+            "syllabus p8 keyword 0.59"
+          ]
+        },
+        "hybrid": {
+          "rank": 5,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.2,
+          "kept_hit5": true,
+          "top": [
+            "syllabus p6 both 0.49",
+            "syllabus p8 both 0.51",
+            "syllabus p5 both 0.50",
+            "syllabus p12 both 0.50",
+            "syllabus p11 both 0.54"
+          ]
+        }
+      }
+    },
+    {
+      "id": "course-code",
+      "type": "exact",
+      "answerable": true,
+      "question": "ITSE-1359",
+      "search_query": "ITSE-1359",
+      "modes": {
+        "vector": {
+          "rank": 3,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.3333333333333333,
+          "kept_hit5": false,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 vector 0.69",
+            "case_3-3_Rafid_Gantt p1 vector 0.71",
+            "syllabus p1 vector 0.71",
+            "syllabus p21 vector 0.71",
+            "case_3-3_Rafid_Netwo p1 vector 0.71"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "top": [
+            "syllabus p1 keyword 0.73"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "top": [
+            "syllabus p1 both 0.73",
+            "case_3-3_Rafid_Netwo p1 vector 0.69",
+            "case_3-3_Rafid_Gantt p1 vector 0.71",
+            "syllabus p1 vector 0.71",
+            "syllabus p21 vector 0.71"
+          ]
+        }
+      }
+    },
+    {
+      "id": "instructor-after-late-policy",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "Who is the instructor?",
+      "search_query": "Who is the instructor?",
+      "modes": {
+        "vector": {
+          "rank": 6,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.16666666666666666,
+          "kept_hit5": false,
+          "top": [
+            "syllabus p21 vector 0.59",
+            "syllabus p11 vector 0.60",
+            "syllabus p14 vector 0.61",
+            "syllabus p4 vector 0.62",
+            "syllabus p11 vector 0.62"
+          ]
+        },
+        "keyword": {
+          "rank": null,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.0,
+          "kept_hit5": false,
+          "top": [
+            "syllabus p7 keyword 0.77",
+            "syllabus p11 keyword 0.62",
+            "syllabus p14 keyword 0.61",
+            "syllabus p21 keyword 0.59"
+          ]
+        },
+        "hybrid": {
+          "rank": 7,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.14285714285714285,
+          "kept_hit5": false,
+          "top": [
+            "syllabus p21 both 0.59",
+            "syllabus p14 both 0.61",
+            "syllabus p11 both 0.62",
+            "syllabus p7 keyword 0.77",
+            "syllabus p11 vector 0.60"
+          ]
+        }
+      }
+    },
+    {
+      "id": "late-policy-final-project",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "Does that apply to the final project too?",
+      "search_query": "Does that apply to the final project too?",
+      "modes": {
+        "vector": {
+          "rank": 3,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.3333333333333333,
+          "kept_hit5": true,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 vector 0.60",
+            "case_3-3_Rafid_Gantt p1 vector 0.60",
+            "syllabus p11 vector 0.61",
+            "case_3-3_Rafid_Netwo p1 vector 0.61",
+            "syllabus p12 vector 0.62"
+          ]
+        },
+        "keyword": {
+          "rank": 6,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.16666666666666666,
+          "kept_hit5": false,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 keyword 0.64",
+            "case_3-3_Rafid_Gantt p1 keyword 0.60",
+            "syllabus p7 keyword 0.81",
+            "syllabus p10 keyword 0.65",
+            "syllabus p10 keyword 0.79"
+          ]
+        },
+        "hybrid": {
+          "rank": 3,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.3333333333333333,
+          "kept_hit5": true,
+          "top": [
+            "case_3-3_Rafid_Gantt p1 both 0.60",
+            "case_3-3_Rafid_Netwo p1 both 0.64",
+            "syllabus p11 both 0.61",
+            "case_3-3_Rafid_Netwo p1 both 0.60",
+            "syllabus p10 both 0.65"
+          ]
+        }
+      }
+    },
+    {
+      "id": "off-topic-capital",
+      "type": "unanswerable",
+      "answerable": false,
+      "question": "What is the capital of France?",
+      "search_query": "What is the capital of France?",
+      "modes": {
+        "vector": {
+          "rejected": true,
+          "kept": 0,
+          "top": [
+            "syllabus p2 vector 0.88",
+            "syllabus p2 vector 0.91",
+            "syllabus p7 vector 0.91",
+            "syllabus p1 vector 0.92",
+            "syllabus p19 vector 0.93"
+          ]
+        },
+        "keyword": {
+          "rejected": true,
+          "kept": 0,
+          "top": []
+        },
+        "hybrid": {
+          "rejected": true,
+          "kept": 0,
+          "top": [
+            "syllabus p2 vector 0.88",
+            "syllabus p2 vector 0.91",
+            "syllabus p7 vector 0.91",
+            "syllabus p1 vector 0.92",
+            "syllabus p19 vector 0.93"
+          ]
+        }
+      }
+    },
+    {
+      "id": "textbook-name",
+      "type": "semantic",
+      "answerable": true,
+      "question": "What textbook do I need?",
+      "search_query": "What textbook do I need?",
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "top": [
+            "syllabus p3 vector 0.55",
+            "syllabus p3 vector 0.55",
+            "syllabus p6 vector 0.60",
+            "syllabus p4 vector 0.62",
+            "syllabus p6 vector 0.62"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "top": [
+            "syllabus p3 keyword 0.63",
+            "syllabus p4 keyword 0.62",
+            "syllabus p4 keyword 0.71",
+            "syllabus p9 keyword 0.76",
+            "syllabus p9 keyword 0.69"
+          ]
+        },
+        "hybrid": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "top": [
+            "syllabus p4 both 0.62",
+            "syllabus p3 both 0.63",
+            "syllabus p14 both 0.63",
+            "syllabus p9 both 0.69",
+            "syllabus p19 both 0.67"
+          ]
+        }
+      }
+    }
+  ]
+}
