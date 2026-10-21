@@ -72,6 +72,7 @@ export default function Message({ message }) {
                     <span className="source-number">{source.number}</span>
                     <span className="source-title">{source.title}</span>
                     <span className="source-page">page {source.page}</span>
+                    <span className="source-match">{source.match}</span>
                   </button>
                   {open && <blockquote className="source-text">{source.text}</blockquote>}
                 </div>

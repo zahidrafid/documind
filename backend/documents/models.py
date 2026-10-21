@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 from pgvector.django import HnswIndex, VectorField
 
@@ -42,6 +44,7 @@ class Chunk(models.Model):
     chunk_index = models.PositiveIntegerField()
     text = models.TextField()
     embedding = VectorField(dimensions=EMBEDDING_DIMENSIONS, null=True, blank=True)
+    search_vector = SearchVectorField(null=True, editable=False)
 
     class Meta:
         ordering = ["document", "chunk_index"]
@@ -52,7 +55,8 @@ class Chunk(models.Model):
                 m=16,
                 ef_construction=64,
                 opclasses=["vector_cosine_ops"],
-            )
+            ),
+            GinIndex(fields=["search_vector"], name="chunk_search_vector_gin"),
         ]
 
     def __str__(self):

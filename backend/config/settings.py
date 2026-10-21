@@ -173,3 +173,6 @@ CELERY_TASK_IGNORE_RESULT = True
 # mid-job, the job goes back to the queue and runs again.
 CELERY_TASK_ACKS_LATE = True
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+
+# "vector", "keyword" or "hybrid". Lets you compare methods during evaluation.
+SEARCH_MODE = os.getenv("SEARCH_MODE", "hybrid")

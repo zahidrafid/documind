@@ -1,3 +1,4 @@
+from django.contrib.postgres.search import SearchVector
 from django.db import transaction
 
 from documents.models import Chunk, Document
@@ -34,6 +35,9 @@ def ingest_document(document):
                     embedding=vector,
                 )
                 for index, (chunk, vector) in enumerate(zip(chunks, vectors))
+            )
+            document.chunks.update(
+                search_vector=SearchVector("text", config="english")
             )
             document.page_count = page_count
             document.status = Document.Status.READY
