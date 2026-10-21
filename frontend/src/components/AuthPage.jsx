@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../AuthContext.jsx";
 
 export default function AuthPage() {
-  const { login, register } = useAuth();
+  const { login, register, loginAsDemo } = useAuth();
   const [mode, setMode] = useState("login");
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
@@ -24,6 +24,17 @@ export default function AuthPage() {
       } else {
         await register(form.username, form.email, form.password);
       }
+    } catch (err) {
+      setError(err.message);
+      setSubmitting(false);
+    }
+  }
+
+  async function handleDemo() {
+    setError("");
+    setSubmitting(true);
+    try {
+      await loginAsDemo();
     } catch (err) {
       setError(err.message);
       setSubmitting(false);
@@ -72,6 +83,13 @@ export default function AuthPage() {
             {submitting ? "Please wait…" : isLogin ? "Log in" : "Create account"}
           </button>
         </form>
+
+        <div className="demo-box">
+          <button className="btn-secondary demo-btn" onClick={handleDemo} disabled={submitting}>
+            Try the demo account
+          </button>
+          <p className="muted small">No sign-up needed. Ask questions about sample documents.</p>
+        </div>
 
         <p className="muted small">
           {isLogin ? "New here?" : "Already have an account?"}{" "}

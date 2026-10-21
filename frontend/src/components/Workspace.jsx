@@ -125,9 +125,17 @@ export default function Workspace() {
         </div>
       </header>
 
+      {user.is_demo && (
+        <div className="demo-banner">
+          You're using the shared demo account. Ask anything about the sample documents.
+          Create your own account to upload PDFs. Demo chats are visible to other visitors.
+        </div>
+      )}
+
       <div className="layout">
         <aside className="sidebar">
           <DocumentList
+            readOnly={user.is_demo}
             documents={documents}
             loading={loading}
             error={error}

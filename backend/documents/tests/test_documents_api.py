@@ -100,3 +100,10 @@ class DocumentApiTests(TempMediaMixin, FakeOpenAIMixin, TestCase):
         self.assertEqual(response.data["status"], "pending")
         self.assertEqual(response.data["error_message"], "")
         self.mock_delay.assert_called_once_with(document.id)
+
+    @override_settings(MAX_DOCUMENTS_PER_USER=1)
+    def test_document_limit_per_user(self):
+        create_ready_document(self.alice, "First", ["Alpha content."])
+        response = self.upload(pdf_upload("second.pdf", ["Beta content."]))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("up to 1 documents", str(response.data))

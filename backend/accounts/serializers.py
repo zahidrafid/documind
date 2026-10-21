@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password as django_validate_password
 from rest_framework import serializers
 
+from .permissions import is_demo_user
+
 User = get_user_model()
 
 
@@ -23,6 +25,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_demo = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ["id", "username", "email"]
+        fields = ["id", "username", "email", "is_demo"]
+
+    def get_is_demo(self, user):
+        return is_demo_user(user)

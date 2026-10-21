@@ -16,6 +16,7 @@ export default function DocumentList({
   onDelete,
   onRetry,
   onToggle,
+  readOnly = false,
 }) {
   const fileInput = useRef(null);
 
@@ -29,13 +30,15 @@ export default function DocumentList({
     <div className="documents">
       <div className="documents-header">
         <h2>Documents</h2>
-        <button
-          className="btn-primary"
-          onClick={() => fileInput.current.click()}
-          disabled={uploading}
-        >
-          {uploading ? "Uploading…" : "Upload PDF"}
-        </button>
+        {!readOnly && (
+          <button
+            className="btn-primary"
+            onClick={() => fileInput.current.click()}
+            disabled={uploading}
+          >
+            {uploading ? "Uploading…" : "Upload PDF"}
+          </button>
+        )}
         <input
           ref={fileInput}
           type="file"
@@ -82,7 +85,7 @@ export default function DocumentList({
                       {doc.error_message}
                     </span>
                   )}
-                  {doc.status === "failed" && (
+                  {doc.status === "failed" && !readOnly && (
                     <button
                       className="btn-link small retry-btn"
                       onClick={(event) => {
@@ -95,14 +98,16 @@ export default function DocumentList({
                   )}
                 </span>
               </label>
-              <button
-                className="btn-icon"
-                onClick={() => onDelete(doc)}
-                aria-label={`Delete ${doc.title}`}
-                title="Delete"
-              >
-                ×
-              </button>
+              {!readOnly && (
+                <button
+                  className="btn-icon"
+                  onClick={() => onDelete(doc)}
+                  aria-label={`Delete ${doc.title}`}
+                  title="Delete"
+                >
+                  ×
+                </button>
+              )}
             </li>
           ))}
         </ul>

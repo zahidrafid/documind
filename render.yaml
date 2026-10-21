@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: documind-abrar
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health/
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: documind-redis
+          property: connectionString
+      - key: DEMO_USERNAME
+        value: demo
+      - key: OPENAI_EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: OPENAI_CHAT_MODEL
+        sync: false
+      - key: SEARCH_MODE
+        value: hybrid
+      - key: SEARCH_CANDIDATES
+        value: "20"
+      - key: KEYWORD_WEIGHT
+        value: "1.0"
+      - key: QUERY_STRATEGY
+        value: both
+      - key: MAX_DISTANCE
+        value: "0.65"
+      - key: KEYWORD_MAX_DISTANCE
+        value: "2.0"
+      - key: MAX_DOCUMENTS_PER_USER
+        value: "5"
+
+  - type: keyvalue
+    name: documind-redis
+    plan: free
+    ipAllowList: []  # only reachable from your Render services
+    maxmemoryPolicy: noeviction

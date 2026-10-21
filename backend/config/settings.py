@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +31,14 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip() for host in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if host.strip()
+]
+# Render provides the app's public hostname automatically
+if os.getenv("RENDER_EXTERNAL_HOSTNAME"):
+    ALLOWED_HOSTS.append(os.getenv("RENDER_EXTERNAL_HOSTNAME"))
+
+CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
 
 
 # Application definition
@@ -52,6 +60,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -83,16 +92,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+# Neon in production (DATABASE_URL), the Docker database locally
+if os.getenv('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600, conn_health_checks=True)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        }
+    }
 
 
 # Password validation
@@ -130,6 +145,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage'},
+}
+
+# In production, the built React app is copied here and served at the site root
+FRONTEND_DIST = BASE_DIR / 'frontend_dist'
+if FRONTEND_DIST.exists():
+    WHITENOISE_ROOT = FRONTEND_DIST
+    WHITENOISE_INDEX_FILE = True
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 
 # Email
@@ -157,6 +189,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_THROTTLE_RATES': {
+        'ask': os.getenv('THROTTLE_ASK', '30/hour'),
+        'upload': os.getenv('THROTTLE_UPLOAD', '10/day'),
+        'auth': os.getenv('THROTTLE_AUTH', '10/hour'),
+    },
 }
 
 MAX_UPLOAD_SIZE_MB = 20
@@ -185,3 +222,10 @@ QUERY_STRATEGY = os.getenv("QUERY_STRATEGY", "rewrite")  # none, rewrite, both, 
 MAX_DISTANCE = float(os.getenv("MAX_DISTANCE", "0.65"))
 # Keyword matches are kept only if closer than this. 2.0 keeps every keyword match (baseline).
 KEYWORD_MAX_DISTANCE = float(os.getenv("KEYWORD_MAX_DISTANCE", "2.0"))
+
+# Public demo protection
+DEMO_USERNAME = os.getenv("DEMO_USERNAME", "")
+ALLOW_REGISTRATION = os.getenv("ALLOW_REGISTRATION", "True") == "True"
+MAX_DOCUMENTS_PER_USER = int(os.getenv("MAX_DOCUMENTS_PER_USER", "10"))
+
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

@@ -62,6 +62,7 @@ export const api = {
     request("/auth/login/", { method: "POST", body: { username, password } }),
   logout: () => request("/auth/logout/", { method: "POST" }),
   me: () => request("/auth/me/"),
+  demoLogin: () => request("/auth/demo/", { method: "POST" }),
 
   listDocuments: () => request("/documents/"),
   uploadDocument: (file) => {

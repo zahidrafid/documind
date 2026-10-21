@@ -5,7 +5,11 @@ from django.db import transaction
 from django.db.models import Count
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.response import Response
+
+from accounts.permissions import DemoReadOnly
 
 from .models import Document
 from .serializers import DocumentSerializer
@@ -30,6 +34,13 @@ def enqueue_processing(document):
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
     http_method_names = ["get", "post", "delete", "head", "options"]
+    permission_classes = [IsAuthenticated, DemoReadOnly]
+
+    def get_throttles(self):
+        if self.action == "create":
+            self.throttle_scope = "upload"
+            return [ScopedRateThrottle()]
+        return super().get_throttles()
 
     def get_queryset(self):
         # Users only ever see their own documents

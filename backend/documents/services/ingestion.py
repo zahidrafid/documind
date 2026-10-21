@@ -15,6 +15,10 @@ def ingest_document(document):
     document.save(update_fields=["status", "error_message"])
 
     try:
+        if not document.file or not document.file.storage.exists(document.file.name):
+            raise ValueError(
+                "The original PDF is no longer stored on the server. Please upload it again."
+            )
         pages, page_count = extract_pages(document.file.path)
         if not pages:
             raise ValueError(

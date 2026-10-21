@@ -46,3 +46,14 @@ class DocumentSerializer(serializers.ModelSerializer):
 
         return uploaded
 
+    def validate(self, attrs):
+        request = self.context.get("request")
+        if request and self.instance is None:
+            count = Document.objects.filter(owner=request.user).count()
+            if count >= settings.MAX_DOCUMENTS_PER_USER:
+                raise serializers.ValidationError(
+                    f"You can have up to {settings.MAX_DOCUMENTS_PER_USER} documents. "
+                    "Delete one to upload another."
+                )
+        return attrs
+

@@ -193,3 +193,11 @@ input, textarea { font: inherit; }
 .interpreted {
   margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--muted); font-style: italic; white-space: normal;
 }
+
+/* Demo account */
+.demo-box { border-top: 1px solid var(--border); margin-top: 1rem; padding-top: 1rem; text-align: center; }
+.demo-btn { width: 100%; padding: 0.55rem 1rem; font-weight: 600; }
+.demo-banner {
+  background: var(--primary-soft); color: var(--primary); font-size: 0.85rem;
+  padding: 0.5rem 1.25rem; border-bottom: 1px solid #c9d4ff;
+}

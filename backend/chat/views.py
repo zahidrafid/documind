@@ -5,6 +5,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from documents.services.qa import answer_question
@@ -43,6 +44,9 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
 
 class AskView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "ask"
+
     def post(self, request):
         serializer = AskSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
