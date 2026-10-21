@@ -251,15 +251,7 @@
     "id": "late-policy-final-project",
     "type": "follow-up",
     "question": "Does that apply to the final project too?",
-    "expected": [
-      {
-        "document": "syllabus",
-        "pages": [
-          6,
-          11
-        ]
-      }
-    ],
+    "expected": [],
     "history": [
       {
         "role": "user",
@@ -270,7 +262,7 @@
         "content": "The late work policy allows one participation assignment per semester to be turned in late with a 20% penalty, but you must inform the professor to get credit. Challenge assignments can also be turned in late with a 20% penalty up to one week after the due date, and the professor must manually enter the grade after you notify them. Work must be completed in zyBooks and submitted within one week of the due date, except if the due date is in the last week of the semester, when late submission is not allowed. Quizzes are not accepted late at all"
       }
     ],
-    "notes": "There is no final project or exam (p11); late policy is p6."
+    "notes": "No final project exists in the syllabus (p11 says no midterm/final exam), so refusing is correct. Relabeled from [6, 11]."
   },
   {
     "id": "office-location-after-hours",
