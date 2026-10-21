@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api.js";
 import { useAuth } from "../AuthContext.jsx";
 import Chat from "./Chat.jsx";
+import ConversationList from "./ConversationList.jsx";
 import DocumentList from "./DocumentList.jsx";
 
 export default function Workspace() {
@@ -11,6 +12,17 @@ export default function Workspace() {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [conversations, setConversations] = useState([]);
+  const [activeConversationId, setActiveConversationId] = useState(null);
+
+  useEffect(() => {
+    api
+      .listConversations()
+      .then(setConversations)
+      .catch(() => {
+        // Not critical: the chat still works without the list
+      });
+  }, []);
 
   useEffect(() => {
     api
@@ -72,6 +84,27 @@ export default function Workspace() {
     }
   }
 
+  function handleConversationSaved(conversation, makeActive) {
+    // Move this chat to the top of the list (or add it if it's new)
+    setConversations((prev) => [
+      conversation,
+      ...prev.filter((c) => c.id !== conversation.id),
+    ]);
+    if (makeActive) setActiveConversationId(conversation.id);
+  }
+
+  async function handleDeleteConversation(conversation) {
+    if (!window.confirm(`Delete the chat "${conversation.title}"?`)) return;
+    setError("");
+    try {
+      await api.deleteConversation(conversation.id);
+      setConversations((prev) => prev.filter((c) => c.id !== conversation.id));
+      if (activeConversationId === conversation.id) setActiveConversationId(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   function toggleSelected(id) {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -105,9 +138,22 @@ export default function Workspace() {
             onRetry={handleRetry}
             onToggle={toggleSelected}
           />
+          <hr className="sidebar-divider" />
+          <ConversationList
+            conversations={conversations}
+            activeId={activeConversationId}
+            onSelect={setActiveConversationId}
+            onNew={() => setActiveConversationId(null)}
+            onDelete={handleDeleteConversation}
+          />
         </aside>
         <main className="main">
-          <Chat selectedIds={selectedIds} readyCount={readyCount} />
+          <Chat
+            conversationId={activeConversationId}
+            selectedIds={selectedIds}
+            readyCount={readyCount}
+            onConversationSaved={handleConversationSaved}
+          />
         </main>
       </div>
     </div>

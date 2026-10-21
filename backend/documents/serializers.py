@@ -46,10 +46,3 @@ class DocumentSerializer(serializers.ModelSerializer):
 
         return uploaded
 
-
-class AskSerializer(serializers.Serializer):
-    question = serializers.CharField(max_length=1000)
-    document_ids = serializers.ListField(
-        child=serializers.IntegerField(), required=False, allow_empty=True
-    )
-    top_k = serializers.IntegerField(min_value=1, max_value=10, default=5)

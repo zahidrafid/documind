@@ -14,9 +14,41 @@ Rules:
 - Base every statement on the sources. Do not use outside knowledge.
 - Cite the source number in square brackets after each claim, like [1] or [2][3].
 - If the sources do not contain the answer, reply exactly: "I couldn't find that in your documents."
-- Be concise and clear."""
+- Be concise and clear.
+- The conversation so far is only there to help you understand the question. Facts must still come from the sources."""
 
 NOT_FOUND_MESSAGE = "I couldn't find that in your documents."
+
+REWRITE_PROMPT = """You rewrite follow-up questions so they can be understood without the conversation.
+
+Given the conversation so far and a follow-up question, rewrite the follow-up as one standalone question that includes any names, topics or details it refers to.
+- If the question is already standalone, return it unchanged.
+- Do not answer the question.
+- Return only the rewritten question, nothing else."""
+
+
+def format_history(history, max_chars=600):
+    """Turn [{"role": ..., "content": ...}] into readable text for a prompt."""
+    lines = []
+    for message in history:
+        speaker = "User" if message["role"] == "user" else "Assistant"
+        text = message["content"]
+        if len(text) > max_chars:
+            text = text[:max_chars] + "…"
+        lines.append(f"{speaker}: {text}")
+    return "\n".join(lines)
+
+
+def rewrite_question(question, history):
+    """Turn a follow-up into a standalone question for searching."""
+    if not history:
+        return question  # first question: nothing to rewrite, skip the API call
+    user_message = (
+        f"Conversation so far:\n{format_history(history)}\n\n"
+        f"Follow-up question: {question}"
+    )
+    rewritten = chat(REWRITE_PROMPT, user_message).strip().strip('"')
+    return rewritten or question
 
 CANDIDATES_PER_METHOD = 20  # how many results each search method contributes
 RRF_K = 60  # standard Reciprocal Rank Fusion constant
@@ -114,10 +146,19 @@ def search_chunks(question, user, top_k=5, document_ids=None, mode=None):
 
 
 def answer_question(
-    question, user, top_k=5, max_distance=0.65, document_ids=None, mode=None
+    question,
+    user,
+    history=None,
+    top_k=5,
+    max_distance=0.65,
+    document_ids=None,
+    mode=None,
 ):
+    history = history or []
+    search_query = rewrite_question(question, history)
+
     chunks = search_chunks(
-        question, user, top_k=top_k, document_ids=document_ids, mode=mode
+        search_query, user, top_k=top_k, document_ids=document_ids, mode=mode
     )
 
     # Keep chunks that are close in meaning OR contain the question's words.
@@ -128,13 +169,22 @@ def answer_question(
         if chunk.distance <= max_distance or chunk.match in ("keyword", "both")
     ]
     if not relevant:
-        return {"answer": NOT_FOUND_MESSAGE, "sources": []}
+        return {"answer": NOT_FOUND_MESSAGE, "sources": [], "search_query": search_query}
 
     context = "\n\n".join(
         f"[{number}] {chunk.document.title}, page {chunk.page_number}:\n{chunk.text}"
         for number, chunk in enumerate(relevant, start=1)
     )
-    user_message = f"Sources:\n{context}\n\nQuestion: {question}"
+
+    history_text = (
+        f"Conversation so far:\n{format_history(history)}\n\n" if history else ""
+    )
+    question_text = (
+        question
+        if search_query == question
+        else f"{question}\n(Interpreted as: {search_query})"
+    )
+    user_message = f"{history_text}Sources:\n{context}\n\nQuestion: {question_text}"
     answer = chat(SYSTEM_PROMPT, user_message)
 
     sources = [
@@ -149,4 +199,4 @@ def answer_question(
         }
         for number, chunk in enumerate(relevant, start=1)
     ]
-    return {"answer": answer, "sources": sources}
+    return {"answer": answer, "sources": sources, "search_query": search_query}

@@ -72,9 +72,17 @@ export const api = {
   deleteDocument: (id) => request(`/documents/${id}/`, { method: "DELETE" }),
   reprocessDocument: (id) => request(`/documents/${id}/reprocess/`, { method: "POST" }),
 
-  ask: (question, documentIds) =>
+  listConversations: () => request("/conversations/"),
+  getConversation: (id) => request(`/conversations/${id}/`),
+  deleteConversation: (id) => request(`/conversations/${id}/`, { method: "DELETE" }),
+
+  ask: (question, documentIds, conversationId) =>
     request("/ask/", {
       method: "POST",
-      body: { question, document_ids: documentIds },
+      body: {
+        question,
+        document_ids: documentIds,
+        conversation_id: conversationId ?? null,
+      },
     }),
 };

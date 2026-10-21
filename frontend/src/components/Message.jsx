@@ -50,6 +50,9 @@ export default function Message({ message }) {
     <div className="message assistant">
       <div className={`bubble ${message.isError ? "bubble-error" : ""}`}>
         <AnswerText text={message.text} validNumbers={validNumbers} onCite={openSource} />
+        {message.interpretedAs && (
+          <p className="interpreted">Searched for: “{message.interpretedAs}”</p>
+        )}
 
         {sources.length > 0 && (
           <div className="sources">

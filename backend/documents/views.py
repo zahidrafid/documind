@@ -1,17 +1,14 @@
 import logging
 from pathlib import Path
 
-import openai
 from django.db import transaction
 from django.db.models import Count
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import Document
-from .serializers import AskSerializer, DocumentSerializer
-from .services.qa import answer_question
+from .serializers import DocumentSerializer
 from .tasks import process_document
 
 logger = logging.getLogger(__name__)
@@ -80,25 +77,3 @@ class DocumentViewSet(viewsets.ModelViewSet):
         instance.file.delete(save=False)  # remove the PDF from disk too
         instance.delete()  # chunks are deleted automatically (CASCADE)
 
-
-class AskView(APIView):
-    def post(self, request):
-        serializer = AskSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        data = serializer.validated_data
-
-        try:
-            result = answer_question(
-                data["question"],
-                request.user,
-                top_k=data["top_k"],
-                document_ids=data.get("document_ids"),
-            )
-        except openai.OpenAIError:
-            logger.exception("OpenAI request failed")
-            return Response(
-                {"detail": "The AI service is unavailable right now. Please try again."},
-                status=status.HTTP_502_BAD_GATEWAY,
-            )
-
-        return Response(result)
