@@ -8,7 +8,7 @@ Live demo: https://documind-abrar.onrender.com — click "Try the demo account" 
 Free hosting: the first load after a quiet period can take up to a minute.
 
 <!-- Demo video: add the unlisted YouTube link here -->
-<!-- ![Asking a question with a citation opened](docs/screenshot-chat.png) -->
+![Asking a question with a citation opened](docs/screenshot-chat.png)
 
 ## What it does
 
