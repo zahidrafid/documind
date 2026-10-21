@@ -1,3 +1,4 @@
+import json
 import os
 from functools import lru_cache
 
@@ -37,3 +38,19 @@ def chat(system_prompt, user_message):
         ],
     )
     return response.choices[0].message.content
+
+
+def chat_json(system_prompt, user_message):
+    """Ask for a JSON object. Returns {} if the reply isn't valid JSON."""
+    response = get_client().chat.completions.create(
+        model=chat_model(),
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message},
+        ],
+        response_format={"type": "json_object"},
+    )
+    try:
+        return json.loads(response.choices[0].message.content or "{}")
+    except json.JSONDecodeError:
+        return {}

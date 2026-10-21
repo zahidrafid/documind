@@ -1,0 +1,74 @@
+[
+  {
+    "id": "holdout-meeting-times",
+    "type": "semantic",
+    "question": "What day and time does the class meet in person?",
+    "expected": [{ "document": "syllabus", "pages": [1] }]
+  },
+  {
+    "id": "holdout-financial-aid-census",
+    "type": "semantic",
+    "question": "I'm on financial aid. What do I need to do in the first two weeks so I don't get dropped?",
+    "expected": [{ "document": "syllabus", "pages": [14] }]
+  },
+  {
+    "id": "holdout-quiz-go-back",
+    "type": "semantic",
+    "question": "Can I go back and change an answer during a quiz?",
+    "expected": [{ "document": "syllabus", "pages": [10] }]
+  },
+  {
+    "id": "holdout-book-bundle-opt-out",
+    "type": "exact",
+    "question": "Cougar Book Bundle opt out",
+    "expected": [{ "document": "syllabus", "pages": [3] }]
+  },
+  {
+    "id": "holdout-tech-support",
+    "type": "exact",
+    "question": "eLC technical support phone number",
+    "expected": [{ "document": "syllabus", "pages": [7] }]
+  },
+  {
+    "id": "holdout-book-meeting",
+    "type": "follow-up",
+    "question": "Can I schedule a meeting with him instead?",
+    "history": [
+      { "role": "user", "content": "When are the professor's office hours?" },
+      { "role": "assistant", "content": "Online office hours are Tuesday 2:50-4:50 pm and Thursday 12:00-2:00 pm, and in-office hours are Tuesday 4:50-5:50 pm and Thursday 8:50-9:50 am [1]." }
+    ],
+    "expected": [{ "document": "syllabus", "pages": [2] }]
+  },
+  {
+    "id": "holdout-on-time-percentage",
+    "type": "follow-up",
+    "question": "What percentage do I need to get all of them?",
+    "history": [
+      { "role": "user", "content": "How do the on-time and lab points work?" },
+      { "role": "assistant", "content": "You can earn a point for being on time to each class and another for submitting in-class lab practice. At the end of the semester these are converted to 0-5 points toward your final grade [1]." }
+    ],
+    "expected": [{ "document": "syllabus", "pages": [12] }]
+  },
+  {
+    "id": "holdout-go-live",
+    "type": "semantic",
+    "question": "When does the new intranet system go live?",
+    "expected": [
+      { "document": "case_3-3_Rafid_Gantt", "pages": [1] },
+      { "document": "case_3-3_Rafid_Network", "pages": [1] }
+    ]
+  },
+  {
+    "id": "holdout-prerequisites",
+    "type": "unanswerable",
+    "question": "Are there any prerequisite courses I need before taking this class?",
+    "expected": []
+  },
+  {
+    "id": "holdout-zybooks-price",
+    "type": "unanswerable",
+    "question": "How much does the zyBooks subscription cost?",
+    "expected": [],
+    "notes": "Syllabus says a subscription is required and mentions comparing prices, but never gives an amount."
+  }
+]

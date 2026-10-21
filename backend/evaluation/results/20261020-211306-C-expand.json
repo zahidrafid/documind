@@ -1,0 +1,1532 @@
+{
+  "label": "C-expand",
+  "settings": {
+    "strategy": "expand",
+    "candidates": 20,
+    "keyword_weight": 1.0,
+    "max_distance": 0.65,
+    "keyword_max_distance": 2.0,
+    "modes": [
+      "vector",
+      "keyword",
+      "hybrid"
+    ],
+    "answers": false,
+    "chat_model": "gpt-4.1-mini",
+    "embedding_model": "text-embedding-3-small"
+  },
+  "summary": {
+    "counts": {
+      "answerable": 21,
+      "unanswerable": 4
+    },
+    "modes": {
+      "vector": {
+        "hit@1": 71.4,
+        "hit@5": 90.5,
+        "mrr": 0.767,
+        "kept@5": 90.5,
+        "rejected": 50.0
+      },
+      "keyword": {
+        "hit@1": 57.1,
+        "hit@5": 90.5,
+        "mrr": 0.712,
+        "kept@5": 90.5,
+        "rejected": 0.0
+      },
+      "hybrid": {
+        "hit@1": 52.4,
+        "hit@5": 95.2,
+        "mrr": 0.709,
+        "kept@5": 95.2,
+        "rejected": 0.0
+      }
+    },
+    "by_type": {
+      "vector": {
+        "exact": 83.3,
+        "follow-up": 80.0,
+        "semantic": 100.0
+      },
+      "keyword": {
+        "exact": 100.0,
+        "follow-up": 60.0,
+        "semantic": 100.0
+      },
+      "hybrid": {
+        "exact": 100.0,
+        "follow-up": 80.0,
+        "semantic": 100.0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "late-homework",
+      "type": "semantic",
+      "answerable": true,
+      "question": "What happens if I submit homework late?",
+      "search_query": "What happens if I submit homework late?",
+      "queries": [
+        "What happens if I submit homework late?",
+        "What are the consequences of submitting homework after the deadline?",
+        "What is the policy for late homework submissions?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.325,
+          "top": [
+            "syllabus p6 vector 0.33",
+            "syllabus p5 vector 0.43",
+            "syllabus p6 vector 0.49",
+            "syllabus p8 vector 0.50",
+            "syllabus p5 vector 0.50"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.494,
+          "top": [
+            "syllabus p6 keyword 0.49",
+            "syllabus p8 keyword 0.50",
+            "syllabus p5 keyword 0.50",
+            "syllabus p12 keyword 0.50",
+            "syllabus p18 keyword 0.61"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.325,
+          "top": [
+            "syllabus p6 both 0.49",
+            "syllabus p8 both 0.50",
+            "syllabus p5 both 0.50",
+            "syllabus p12 both 0.50",
+            "syllabus p6 both 0.33"
+          ]
+        }
+      }
+    },
+    {
+      "id": "textbook-name",
+      "type": "semantic",
+      "answerable": true,
+      "question": "What textbook do I need?",
+      "search_query": "What textbook do I need?",
+      "queries": [
+        "What textbook do I need?",
+        "Required textbook for the course",
+        "Which book is needed for the class"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.477,
+          "top": [
+            "syllabus p3 vector 0.48",
+            "syllabus p4 vector 0.48",
+            "syllabus p3 vector 0.52",
+            "syllabus p14 vector 0.53",
+            "syllabus p6 vector 0.54"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.481,
+          "top": [
+            "syllabus p3 keyword 0.57",
+            "syllabus p4 keyword 0.63",
+            "syllabus p4 keyword 0.48",
+            "syllabus p10 keyword 0.67",
+            "syllabus p9 keyword 0.69"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.477,
+          "top": [
+            "syllabus p4 both 0.48",
+            "syllabus p3 both 0.57",
+            "syllabus p3 both 0.48",
+            "syllabus p3 both 0.52",
+            "syllabus p14 both 0.53"
+          ]
+        }
+      }
+    },
+    {
+      "id": "quiz-late",
+      "type": "semantic",
+      "answerable": true,
+      "question": "Can I make up a quiz if I miss the deadline?",
+      "search_query": "Can I make up a quiz if I miss the deadline?",
+      "queries": [
+        "Can I make up a quiz if I miss the deadline?",
+        "Is it possible to retake a quiz after missing the due date?",
+        "Can I complete a quiz late if I fail to meet the deadline?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.339,
+          "top": [
+            "syllabus p5 vector 0.34",
+            "syllabus p10 vector 0.46",
+            "syllabus p6 vector 0.41",
+            "syllabus p5 vector 0.52",
+            "syllabus p6 vector 0.50"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.339,
+          "top": [
+            "syllabus p6 keyword 0.41",
+            "syllabus p5 keyword 0.34",
+            "syllabus p10 keyword 0.60",
+            "syllabus p18 keyword 0.61",
+            "syllabus p14 keyword 0.62"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.339,
+          "top": [
+            "syllabus p6 both 0.41",
+            "syllabus p5 both 0.34",
+            "syllabus p10 both 0.60",
+            "syllabus p10 both 0.46",
+            "syllabus p6 both 0.50"
+          ]
+        }
+      }
+    },
+    {
+      "id": "quiz-weight",
+      "type": "semantic",
+      "answerable": true,
+      "question": "How much are quizzes worth toward my grade?",
+      "search_query": "How much are quizzes worth toward my grade?",
+      "queries": [
+        "How much are quizzes worth toward my grade?",
+        "What percentage of the final grade do quizzes constitute?",
+        "How much do quizzes contribute to the overall course grade?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 5,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.2,
+          "kept_hit5": true,
+          "correct_distance": 0.477,
+          "top": [
+            "syllabus p10 vector 0.38",
+            "syllabus p10 vector 0.41",
+            "syllabus p5 vector 0.48",
+            "syllabus p4 vector 0.45",
+            "syllabus p13 vector 0.48"
+          ]
+        },
+        "keyword": {
+          "rank": 3,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.3333333333333333,
+          "kept_hit5": true,
+          "correct_distance": 0.477,
+          "top": [
+            "syllabus p10 keyword 0.38",
+            "syllabus p4 keyword 0.45",
+            "syllabus p13 keyword 0.48",
+            "syllabus p6 keyword 0.57",
+            "syllabus p12 keyword 0.51"
+          ]
+        },
+        "hybrid": {
+          "rank": 3,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.3333333333333333,
+          "kept_hit5": true,
+          "correct_distance": 0.477,
+          "top": [
+            "syllabus p10 both 0.38",
+            "syllabus p4 both 0.45",
+            "syllabus p13 both 0.48",
+            "syllabus p10 both 0.41",
+            "syllabus p10 both 0.48"
+          ]
+        }
+      }
+    },
+    {
+      "id": "drop-lowest-quiz",
+      "type": "semantic",
+      "answerable": true,
+      "question": "Does the lowest quiz score get thrown out?",
+      "search_query": "Does the lowest quiz score get dropped from the grade calculation?",
+      "queries": [
+        "Does the lowest quiz score get thrown out?",
+        "Does the lowest quiz score get dropped from the grade calculation?",
+        "Is the lowest quiz grade excluded from the overall score?",
+        "Are the lowest quiz marks omitted from the final grade?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.455,
+          "top": [
+            "syllabus p10 vector 0.46",
+            "syllabus p10 vector 0.47",
+            "syllabus p9 vector 0.49",
+            "syllabus p13 vector 0.51",
+            "syllabus p13 vector 0.53"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.455,
+          "top": [
+            "syllabus p10 keyword 0.46",
+            "syllabus p10 keyword 0.47",
+            "syllabus p5 keyword 0.58",
+            "syllabus p5 keyword 0.62",
+            "syllabus p13 keyword 0.53"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.455,
+          "top": [
+            "syllabus p10 both 0.46",
+            "syllabus p10 both 0.47",
+            "syllabus p13 both 0.53",
+            "syllabus p5 both 0.58",
+            "syllabus p12 both 0.53"
+          ]
+        }
+      }
+    },
+    {
+      "id": "weekly-hours",
+      "type": "semantic",
+      "answerable": true,
+      "question": "How many hours a week should I plan to spend on this class?",
+      "search_query": "How many hours per week should I plan to spend on this class?",
+      "queries": [
+        "How many hours a week should I plan to spend on this class?",
+        "How many hours per week should I plan to spend on this class?",
+        "What is the expected weekly time commitment for this course?",
+        "How many hours weekly are recommended to dedicate to this class?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.396,
+          "top": [
+            "syllabus p11 vector 0.41",
+            "syllabus p4 vector 0.40",
+            "syllabus p11 vector 0.46",
+            "syllabus p14 vector 0.48",
+            "syllabus p12 vector 0.49"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.396,
+          "top": [
+            "syllabus p4 keyword 0.40",
+            "syllabus p11 keyword 0.41",
+            "syllabus p11 keyword 0.46",
+            "syllabus p4 keyword 0.53",
+            "syllabus p10 keyword 0.66"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.396,
+          "top": [
+            "syllabus p11 both 0.41",
+            "syllabus p4 both 0.40",
+            "syllabus p11 both 0.46",
+            "syllabus p4 both 0.53",
+            "syllabus p14 both 0.48"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-allowed",
+      "type": "semantic",
+      "answerable": true,
+      "question": "Am I allowed to use ChatGPT to help write my code?",
+      "search_query": "Am I allowed to use ChatGPT to help write my code?",
+      "queries": [
+        "Am I allowed to use ChatGPT to help write my code?",
+        "Is it permitted to use ChatGPT for assistance in coding?",
+        "Can I utilize ChatGPT as a tool to aid in programming?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.525,
+          "top": [
+            "syllabus p9 vector 0.52",
+            "syllabus p8 vector 0.57",
+            "syllabus p8 vector 0.59",
+            "syllabus p2 vector 0.63",
+            "syllabus p4 vector 0.63"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.525,
+          "top": [
+            "syllabus p9 keyword 0.52",
+            "syllabus p8 keyword 0.57",
+            "syllabus p9 keyword 0.67",
+            "syllabus p3 keyword 0.73",
+            "syllabus p3 keyword 0.85"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.525,
+          "top": [
+            "syllabus p9 both 0.52",
+            "syllabus p8 both 0.57",
+            "syllabus p8 both 0.59",
+            "syllabus p9 both 0.67",
+            "syllabus p8 both 0.68"
+          ]
+        }
+      }
+    },
+    {
+      "id": "scores-not-syncing",
+      "type": "semantic",
+      "answerable": true,
+      "question": "My zyBooks scores aren't showing up in Canvas. What should I do?",
+      "search_query": "What should I do if my zyBooks scores are not showing up in Canvas?",
+      "queries": [
+        "My zyBooks scores aren't showing up in Canvas. What should I do?",
+        "What should I do if my zyBooks scores are not showing up in Canvas?",
+        "How can I fix zyBooks grades not appearing in Canvas?",
+        "What steps should I take if my zyBooks scores are missing from Canvas?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.278,
+          "top": [
+            "syllabus p5 vector 0.28",
+            "syllabus p5 vector 0.29",
+            "syllabus p10 vector 0.34",
+            "syllabus p6 vector 0.35",
+            "syllabus p3 vector 0.36"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.278,
+          "top": [
+            "syllabus p5 keyword 0.28",
+            "syllabus p5 keyword 0.29",
+            "syllabus p6 keyword 0.54",
+            "syllabus p6 keyword 0.35",
+            "syllabus p3 keyword 0.43"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.278,
+          "top": [
+            "syllabus p5 both 0.28",
+            "syllabus p5 both 0.29",
+            "syllabus p10 both 0.34",
+            "syllabus p6 both 0.35",
+            "syllabus p3 both 0.43"
+          ]
+        }
+      }
+    },
+    {
+      "id": "final-exam",
+      "type": "semantic",
+      "answerable": true,
+      "question": "Is there a final exam?",
+      "search_query": "Is there a final exam for the course?",
+      "queries": [
+        "Is there a final exam?",
+        "Is there a final exam for the course?",
+        "Does the course include a final examination?",
+        "Is a final test administered in the class?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.369,
+          "top": [
+            "syllabus p11 vector 0.37",
+            "syllabus p10 vector 0.49",
+            "syllabus p10 vector 0.51",
+            "syllabus p12 vector 0.51",
+            "syllabus p11 vector 0.53"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.369,
+          "top": [
+            "syllabus p11 keyword 0.37",
+            "case_3-3_Rafid_Netwo p1 keyword 0.70",
+            "case_3-3_Rafid_Gantt p1 keyword 0.72",
+            "syllabus p13 keyword 0.61",
+            "syllabus p4 keyword 0.56"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.369,
+          "top": [
+            "syllabus p11 both 0.37",
+            "syllabus p13 both 0.56",
+            "syllabus p10 both 0.49",
+            "syllabus p12 both 0.51",
+            "syllabus p21 both 0.58"
+          ]
+        }
+      }
+    },
+    {
+      "id": "project-finish",
+      "type": "semantic",
+      "answerable": true,
+      "question": "When does the intranet project finish?",
+      "search_query": "When does the intranet project finish?",
+      "queries": [
+        "When does the intranet project finish?",
+        "What is the completion date of the intranet project?",
+        "By when will the intranet project be completed?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.439,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 vector 0.38",
+            "case_3-3_Rafid_Gantt p1 vector 0.44",
+            "case_3-3_Rafid_Netwo p1 vector 0.48",
+            "case_3-3_Rafid_Gantt p1 vector 0.48",
+            "case_3-3_Rafid_Gantt p1 vector 0.49"
+          ]
+        },
+        "keyword": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.439,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 keyword 0.48",
+            "case_3-3_Rafid_Gantt p1 keyword 0.49",
+            "case_3-3_Rafid_Netwo p1 keyword 0.51",
+            "case_3-3_Rafid_Gantt p1 keyword 0.48",
+            "case_3-3_Rafid_Gantt p1 keyword 0.44"
+          ]
+        },
+        "hybrid": {
+          "rank": 3,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.3333333333333333,
+          "kept_hit5": true,
+          "correct_distance": 0.439,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 both 0.48",
+            "case_3-3_Rafid_Netwo p1 both 0.38",
+            "case_3-3_Rafid_Gantt p1 both 0.44",
+            "case_3-3_Rafid_Gantt p1 both 0.48",
+            "case_3-3_Rafid_Gantt p1 both 0.49"
+          ]
+        }
+      }
+    },
+    {
+      "id": "course-code",
+      "type": "exact",
+      "answerable": true,
+      "question": "ITSE-1359",
+      "search_query": "Information about ITSE-1359 course.",
+      "queries": [
+        "ITSE-1359",
+        "Information about ITSE-1359 course.",
+        "Details on ITSE-1359 class",
+        "Information on course ITSE-1359"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.473,
+          "top": [
+            "syllabus p1 vector 0.47",
+            "syllabus p21 vector 0.52",
+            "syllabus p6 vector 0.52",
+            "syllabus p1 vector 0.54",
+            "syllabus p19 vector 0.57"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.543,
+          "top": [
+            "syllabus p1 keyword 0.54",
+            "syllabus p4 keyword 0.61",
+            "syllabus p8 keyword 0.65",
+            "syllabus p14 keyword 0.67",
+            "syllabus p11 keyword 0.60"
+          ]
+        },
+        "hybrid": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.473,
+          "top": [
+            "syllabus p21 both 0.52",
+            "syllabus p1 both 0.54",
+            "syllabus p1 vector 0.47",
+            "syllabus p6 both 0.52",
+            "syllabus p19 both 0.57"
+          ]
+        }
+      }
+    },
+    {
+      "id": "instructor-email",
+      "type": "exact",
+      "answerable": true,
+      "question": "jlewis@collin.edu",
+      "search_query": "What is the email address for jlewis@collin.edu?",
+      "queries": [
+        "jlewis@collin.edu",
+        "What is the email address for jlewis@collin.edu?",
+        "Email address for jlewis at collin.edu",
+        "Contact email of jlewis@collin.edu"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.29,
+          "top": [
+            "syllabus p2 vector 0.29",
+            "syllabus p1 vector 0.33",
+            "syllabus p2 vector 0.37",
+            "syllabus p7 vector 0.40",
+            "syllabus p21 vector 0.43"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.29,
+          "top": [
+            "syllabus p2 keyword 0.29",
+            "syllabus p1 keyword 0.33",
+            "syllabus p3 keyword 0.65",
+            "syllabus p6 keyword 0.71",
+            "syllabus p6 keyword 0.64"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.29,
+          "top": [
+            "syllabus p2 both 0.29",
+            "syllabus p1 both 0.33",
+            "syllabus p2 both 0.37",
+            "syllabus p7 vector 0.40",
+            "syllabus p20 both 0.45"
+          ]
+        }
+      }
+    },
+    {
+      "id": "classroom",
+      "type": "exact",
+      "answerable": true,
+      "question": "IT302",
+      "search_query": "What information is available about the course IT302?",
+      "queries": [
+        "IT302",
+        "What information is available about the course IT302?",
+        "Details about the IT302 course",
+        "Information on the IT302 class"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.538,
+          "top": [
+            "syllabus p1 vector 0.54",
+            "syllabus p6 vector 0.54",
+            "syllabus p21 vector 0.58",
+            "syllabus p15 vector 0.59",
+            "case_3-3_Rafid_Netwo p1 vector 0.64"
+          ]
+        },
+        "keyword": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.538,
+          "top": [
+            "syllabus p21 keyword 0.58",
+            "syllabus p1 keyword 0.54",
+            "syllabus p20 keyword 0.65",
+            "syllabus p4 keyword 0.64",
+            "syllabus p19 keyword 0.69"
+          ]
+        },
+        "hybrid": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.538,
+          "top": [
+            "syllabus p21 both 0.58",
+            "syllabus p1 both 0.54",
+            "syllabus p11 both 0.59",
+            "syllabus p6 both 0.54",
+            "syllabus p15 vector 0.59"
+          ]
+        }
+      }
+    },
+    {
+      "id": "office-room",
+      "type": "exact",
+      "answerable": true,
+      "question": "IT Center 111A",
+      "search_query": "What information is available about IT Center 111A?",
+      "queries": [
+        "IT Center 111A",
+        "What information is available about IT Center 111A?",
+        "Details regarding IT Center room 111A",
+        "Information about IT Center office 111A"
+      ],
+      "modes": {
+        "vector": {
+          "rank": null,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.0,
+          "kept_hit5": false,
+          "correct_distance": null,
+          "top": [
+            "syllabus p1 vector 0.61",
+            "case_3-3_Rafid_Netwo p1 vector 0.65",
+            "syllabus p7 vector 0.65",
+            "case_3-3_Rafid_Netwo p1 vector 0.65",
+            "syllabus p1 vector 0.67"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.634,
+          "top": [
+            "syllabus p2 keyword 0.63",
+            "syllabus p18 keyword 0.68",
+            "syllabus p21 keyword 0.63",
+            "syllabus p7 keyword 0.65",
+            "syllabus p20 keyword 0.70"
+          ]
+        },
+        "hybrid": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.634,
+          "top": [
+            "syllabus p7 both 0.65",
+            "syllabus p2 both 0.63",
+            "syllabus p1 both 0.67",
+            "syllabus p1 vector 0.61",
+            "case_3-3_Rafid_Netwo p1 vector 0.65"
+          ]
+        }
+      }
+    },
+    {
+      "id": "access-office",
+      "type": "exact",
+      "answerable": true,
+      "question": "ACCESS office phone number",
+      "search_query": "What is the phone number for the ACCESS office?",
+      "queries": [
+        "ACCESS office phone number",
+        "What is the phone number for the ACCESS office?",
+        "ACCESS office contact number",
+        "Phone number for the ACCESS department"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.623,
+          "top": [
+            "syllabus p7 vector 0.62",
+            "syllabus p2 vector 0.63",
+            "syllabus p19 vector 0.63",
+            "syllabus p2 vector 0.63",
+            "syllabus p7 vector 0.64"
+          ]
+        },
+        "keyword": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.623,
+          "top": [
+            "syllabus p2 keyword 0.63",
+            "syllabus p7 keyword 0.73",
+            "syllabus p18 keyword 0.87",
+            "syllabus p4 keyword 0.73",
+            "syllabus p6 keyword 0.77"
+          ]
+        },
+        "hybrid": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.623,
+          "top": [
+            "syllabus p2 both 0.63",
+            "syllabus p7 both 0.62",
+            "syllabus p7 both 0.64",
+            "syllabus p7 both 0.73",
+            "syllabus p19 both 0.63"
+          ]
+        }
+      }
+    },
+    {
+      "id": "uat-signoff",
+      "type": "exact",
+      "answerable": true,
+      "question": "User acceptance testing signed off",
+      "search_query": "Has the user acceptance testing been signed off?",
+      "queries": [
+        "User acceptance testing signed off",
+        "Has the user acceptance testing been signed off?",
+        "Has user acceptance testing received approval?",
+        "Is the user acceptance testing formally completed and approved?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.551,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 vector 0.55",
+            "case_3-3_Rafid_Gantt p1 vector 0.55",
+            "case_3-3_Rafid_Netwo p1 vector 0.56",
+            "case_3-3_Rafid_Gantt p1 vector 0.57",
+            "syllabus p10 vector 0.60"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.551,
+          "top": [
+            "case_3-3_Rafid_Gantt p1 keyword 0.55",
+            "case_3-3_Rafid_Netwo p1 keyword 0.55",
+            "case_3-3_Rafid_Netwo p1 keyword 0.56",
+            "case_3-3_Rafid_Gantt p1 keyword 0.64",
+            "case_3-3_Rafid_Netwo p1 keyword 0.63"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.551,
+          "top": [
+            "case_3-3_Rafid_Gantt p1 both 0.55",
+            "case_3-3_Rafid_Netwo p1 both 0.55",
+            "case_3-3_Rafid_Netwo p1 both 0.56",
+            "case_3-3_Rafid_Gantt p1 both 0.64",
+            "case_3-3_Rafid_Gantt p1 both 0.57"
+          ]
+        }
+      }
+    },
+    {
+      "id": "instructor-after-late-policy",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "Who is the instructor?",
+      "search_query": "Who is the instructor for the course?",
+      "queries": [
+        "Who is the instructor?",
+        "Who is the instructor for the course?",
+        "Who is the professor for this class?",
+        "What is the name of the faculty member teaching this course?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 5,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.2,
+          "kept_hit5": true,
+          "correct_distance": 0.571,
+          "top": [
+            "syllabus p11 vector 0.54",
+            "syllabus p4 vector 0.55",
+            "syllabus p21 vector 0.54",
+            "syllabus p14 vector 0.55",
+            "syllabus p1 vector 0.57"
+          ]
+        },
+        "keyword": {
+          "rank": null,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.0,
+          "kept_hit5": false,
+          "correct_distance": null,
+          "top": [
+            "syllabus p21 keyword 0.54",
+            "syllabus p4 keyword 0.60",
+            "syllabus p20 keyword 0.63",
+            "syllabus p6 keyword 0.58",
+            "syllabus p9 keyword 0.71"
+          ]
+        },
+        "hybrid": {
+          "rank": 7,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.14285714285714285,
+          "kept_hit5": false,
+          "correct_distance": 0.571,
+          "top": [
+            "syllabus p21 both 0.54",
+            "syllabus p6 both 0.58",
+            "syllabus p11 both 0.54",
+            "syllabus p4 both 0.55",
+            "syllabus p14 both 0.55"
+          ]
+        }
+      }
+    },
+    {
+      "id": "late-policy-final-project",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "Does that apply to the final project too?",
+      "search_query": "Does the late work policy apply to the final project as well?",
+      "queries": [
+        "Does that apply to the final project too?",
+        "Does the late work policy apply to the final project as well?",
+        "Is the final project subject to the late submission policy?",
+        "Are late submissions allowed for the final project under the late work rules?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.377,
+          "top": [
+            "syllabus p6 vector 0.38",
+            "syllabus p12 vector 0.59",
+            "case_3-3_Rafid_Gantt p1 vector 0.59",
+            "syllabus p6 vector 0.55",
+            "syllabus p11 vector 0.58"
+          ]
+        },
+        "keyword": {
+          "rank": 4,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.25,
+          "kept_hit5": true,
+          "correct_distance": 0.377,
+          "top": [
+            "case_3-3_Rafid_Gantt p1 keyword 0.59",
+            "case_3-3_Rafid_Netwo p1 keyword 0.64",
+            "syllabus p12 keyword 0.61",
+            "syllabus p6 keyword 0.38",
+            "syllabus p8 keyword 0.60"
+          ]
+        },
+        "hybrid": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.377,
+          "top": [
+            "case_3-3_Rafid_Gantt p1 both 0.59",
+            "syllabus p6 both 0.38",
+            "syllabus p12 both 0.59",
+            "case_3-3_Rafid_Netwo p1 both 0.64",
+            "syllabus p10 both 0.62"
+          ]
+        }
+      }
+    },
+    {
+      "id": "office-location-after-hours",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "Where is his office?",
+      "search_query": "Where is the professor's office located?",
+      "queries": [
+        "Where is his office?",
+        "Where is the professor's office located?",
+        "What is the location of the professor's office?",
+        "Where can I find the professor's office?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.526,
+          "top": [
+            "syllabus p2 vector 0.53",
+            "syllabus p2 vector 0.57",
+            "syllabus p1 vector 0.68",
+            "syllabus p7 vector 0.67",
+            "syllabus p7 vector 0.69"
+          ]
+        },
+        "keyword": {
+          "rank": 9,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.1111111111111111,
+          "kept_hit5": false,
+          "correct_distance": 0.526,
+          "top": [
+            "syllabus p6 keyword 0.71",
+            "syllabus p4 keyword 0.75",
+            "syllabus p4 keyword 0.74",
+            "syllabus p6 keyword 0.76",
+            "syllabus p6 keyword 0.71"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.526,
+          "top": [
+            "syllabus p2 both 0.53",
+            "syllabus p7 both 0.67",
+            "syllabus p7 both 0.69",
+            "syllabus p2 vector 0.57",
+            "syllabus p1 vector 0.68"
+          ]
+        }
+      }
+    },
+    {
+      "id": "challenge-weight-after-quiz",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "What about the challenge activities?",
+      "search_query": "How much are the challenge activities worth in the final grade?",
+      "queries": [
+        "What about the challenge activities?",
+        "How much are the challenge activities worth in the final grade?",
+        "What percentage of the final grade do challenge activities contribute?",
+        "How much do challenge activities count toward the overall grade?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": null,
+          "hit1": false,
+          "hit5": false,
+          "rr": 0.0,
+          "kept_hit5": false,
+          "correct_distance": null,
+          "top": [
+            "syllabus p6 vector 0.39",
+            "syllabus p10 vector 0.44",
+            "syllabus p5 vector 0.48",
+            "syllabus p11 vector 0.50",
+            "syllabus p10 vector 0.51"
+          ]
+        },
+        "keyword": {
+          "rank": 4,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.25,
+          "kept_hit5": true,
+          "correct_distance": 0.475,
+          "top": [
+            "syllabus p10 keyword 0.44",
+            "syllabus p11 keyword 0.50",
+            "syllabus p10 keyword 0.51",
+            "syllabus p13 keyword 0.48",
+            "syllabus p6 keyword 0.39"
+          ]
+        },
+        "hybrid": {
+          "rank": 4,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.25,
+          "kept_hit5": true,
+          "correct_distance": 0.475,
+          "top": [
+            "syllabus p10 both 0.44",
+            "syllabus p6 both 0.39",
+            "syllabus p11 both 0.50",
+            "syllabus p13 both 0.48",
+            "syllabus p10 both 0.51"
+          ]
+        }
+      }
+    },
+    {
+      "id": "credit-hours-after-ai",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "How many credit hours is this course?",
+      "search_query": "How many credit hours is this course?",
+      "queries": [
+        "How many credit hours is this course?",
+        "What is the credit hour value of this course?",
+        "How many credits is this course worth?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 5,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.2,
+          "kept_hit5": true,
+          "correct_distance": 0.532,
+          "top": [
+            "syllabus p4 vector 0.50",
+            "syllabus p11 vector 0.54",
+            "syllabus p12 vector 0.58",
+            "syllabus p4 vector 0.59",
+            "syllabus p1 vector 0.53"
+          ]
+        },
+        "keyword": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.532,
+          "top": [
+            "syllabus p12 keyword 0.63",
+            "syllabus p1 keyword 0.65",
+            "syllabus p4 keyword 0.61",
+            "syllabus p12 keyword 0.58",
+            "syllabus p12 keyword 0.66"
+          ]
+        },
+        "hybrid": {
+          "rank": 3,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.3333333333333333,
+          "kept_hit5": true,
+          "correct_distance": 0.532,
+          "top": [
+            "syllabus p4 both 0.50",
+            "syllabus p12 both 0.58",
+            "syllabus p1 both 0.53",
+            "syllabus p12 both 0.63",
+            "syllabus p4 both 0.61"
+          ]
+        }
+      }
+    },
+    {
+      "id": "off-topic-capital",
+      "type": "unanswerable",
+      "answerable": false,
+      "question": "What is the capital of France?",
+      "search_query": "What is the capital city of France?",
+      "queries": [
+        "What is the capital of France?",
+        "What is the capital city of France?",
+        "What city serves as the capital of France?",
+        "Which city is the administrative center of France?"
+      ],
+      "modes": {
+        "vector": {
+          "rejected": true,
+          "kept": 0,
+          "best_distance": 0.833,
+          "best_keyword_distance": null,
+          "top": [
+            "syllabus p2 vector 0.83",
+            "syllabus p2 vector 0.88",
+            "syllabus p7 vector 0.88",
+            "syllabus p1 vector 0.89",
+            "syllabus p19 vector 0.91"
+          ]
+        },
+        "keyword": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.833,
+          "best_keyword_distance": 0.833,
+          "top": [
+            "syllabus p2 keyword 0.83",
+            "syllabus p7 keyword 0.90",
+            "syllabus p18 keyword 0.97",
+            "syllabus p21 keyword 0.92",
+            "case_3-3_Rafid_Netwo p1 keyword 0.99"
+          ]
+        },
+        "hybrid": {
+          "rejected": false,
+          "kept": 1,
+          "best_distance": 0.833,
+          "best_keyword_distance": 0.833,
+          "top": [
+            "syllabus p2 both 0.83",
+            "syllabus p2 vector 0.88",
+            "syllabus p7 vector 0.88",
+            "syllabus p1 vector 0.89",
+            "syllabus p19 vector 0.91"
+          ]
+        }
+      }
+    },
+    {
+      "id": "parking-permit",
+      "type": "unanswerable",
+      "answerable": false,
+      "question": "How much does a campus parking permit cost?",
+      "search_query": "How much does a campus parking permit cost?",
+      "queries": [
+        "How much does a campus parking permit cost?",
+        "What is the price of a campus parking permit?",
+        "How much do campus parking permits cost?"
+      ],
+      "modes": {
+        "vector": {
+          "rejected": true,
+          "kept": 0,
+          "best_distance": 0.676,
+          "best_keyword_distance": null,
+          "top": [
+            "syllabus p3 vector 0.68",
+            "syllabus p19 vector 0.74",
+            "syllabus p7 vector 0.75",
+            "syllabus p12 vector 0.75",
+            "syllabus p21 vector 0.75"
+          ]
+        },
+        "keyword": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.759,
+          "best_keyword_distance": 0.759,
+          "top": [
+            "syllabus p11 keyword 0.76",
+            "syllabus p12 keyword 0.76",
+            "syllabus p11 keyword 0.78",
+            "syllabus p7 keyword 0.76",
+            "syllabus p7 keyword 0.78"
+          ]
+        },
+        "hybrid": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.676,
+          "best_keyword_distance": 0.676,
+          "top": [
+            "syllabus p11 both 0.76",
+            "syllabus p12 both 0.75",
+            "syllabus p12 both 0.76",
+            "syllabus p3 both 0.68",
+            "syllabus p2 both 0.76"
+          ]
+        }
+      }
+    },
+    {
+      "id": "lab-fee-amount",
+      "type": "unanswerable",
+      "answerable": false,
+      "question": "How much is the lab fee for this class?",
+      "search_query": "How much is the lab fee for this class?",
+      "queries": [
+        "How much is the lab fee for this class?",
+        "What is the laboratory fee for the course?",
+        "How much does the lab charge cost for this class?"
+      ],
+      "modes": {
+        "vector": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.537,
+          "best_keyword_distance": null,
+          "top": [
+            "syllabus p1 vector 0.54",
+            "syllabus p3 vector 0.58",
+            "syllabus p4 vector 0.57",
+            "syllabus p11 vector 0.57",
+            "syllabus p1 vector 0.60"
+          ]
+        },
+        "keyword": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.537,
+          "best_keyword_distance": 0.537,
+          "top": [
+            "syllabus p1 keyword 0.54",
+            "syllabus p1 keyword 0.60",
+            "syllabus p3 keyword 0.58",
+            "syllabus p4 keyword 0.66",
+            "syllabus p8 keyword 0.70"
+          ]
+        },
+        "hybrid": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.537,
+          "best_keyword_distance": 0.537,
+          "top": [
+            "syllabus p1 both 0.54",
+            "syllabus p3 both 0.58",
+            "syllabus p1 both 0.60",
+            "syllabus p12 both 0.62",
+            "syllabus p4 both 0.66"
+          ]
+        }
+      }
+    },
+    {
+      "id": "project-budget",
+      "type": "unanswerable",
+      "answerable": false,
+      "question": "What is the total budget for the intranet project?",
+      "search_query": "What is the total budget for the intranet project?",
+      "queries": [
+        "What is the total budget for the intranet project?",
+        "What is the overall funding allocated for the intranet project?",
+        "What is the total financial plan for the intranet project?"
+      ],
+      "modes": {
+        "vector": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.476,
+          "best_keyword_distance": null,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 vector 0.48",
+            "case_3-3_Rafid_Netwo p1 vector 0.49",
+            "case_3-3_Rafid_Gantt p1 vector 0.51",
+            "case_3-3_Rafid_Gantt p1 vector 0.54",
+            "case_3-3_Rafid_Gantt p1 vector 0.58"
+          ]
+        },
+        "keyword": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.489,
+          "best_keyword_distance": 0.489,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 keyword 0.49",
+            "case_3-3_Rafid_Gantt p1 keyword 0.51",
+            "case_3-3_Rafid_Gantt p1 keyword 0.54",
+            "case_3-3_Rafid_Netwo p1 keyword 0.58",
+            "case_3-3_Rafid_Gantt p1 keyword 0.58"
+          ]
+        },
+        "hybrid": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.476,
+          "best_keyword_distance": 0.476,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 both 0.49",
+            "case_3-3_Rafid_Gantt p1 both 0.51",
+            "case_3-3_Rafid_Gantt p1 both 0.54",
+            "case_3-3_Rafid_Netwo p1 both 0.48",
+            "case_3-3_Rafid_Netwo p1 both 0.58"
+          ]
+        }
+      }
+    }
+  ]
+}

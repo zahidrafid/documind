@@ -367,5 +367,44 @@
     "question": "What is the total budget for the intranet project?",
     "expected": [],
     "notes": "Gantt/network show schedule only, no costs."
+  },
+  {
+    "id": "refund",
+    "type": "unanswerable",
+    "question": "How do I get a refund if I drop this course?",
+    "expected": []
+  },
+  {
+    "id": "grade-curve",
+    "type": "unanswerable",
+    "question": "Does the professor curve grades at the end of the semester?",
+    "expected": [],
+    "notes": "Syllabus mentions decimal rounding but no curve."
+  },
+  {
+    "id": "study-group",
+    "type": "unanswerable",
+    "question": "Is there an official study group for this class?",
+    "expected": []
+  },
+  {
+    "id": "library-hours",
+    "type": "unanswerable",
+    "question": "What time does the campus library close?",
+    "expected": [],
+    "notes": "'library' appears only in a zyBooks URL; hard keyword case."
+  },
+  {
+    "id": "sponsor-name",
+    "type": "unanswerable",
+    "question": "What is the name of the intranet project sponsor?",
+    "expected": [],
+    "notes": "Docs mention reviews with the sponsor but never name them."
+  },
+  {
+    "id": "team-size",
+    "type": "unanswerable",
+    "question": "How many people are on the intranet project team?",
+    "expected": []
   }
 ]

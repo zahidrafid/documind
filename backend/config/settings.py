@@ -177,3 +177,11 @@ CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 # "vector", "keyword" or "hybrid". Lets you compare methods during evaluation.
 SEARCH_MODE = os.getenv("SEARCH_MODE", "hybrid")
+
+# Retrieval tuning. Defaults match the baseline; change them after evaluating.
+SEARCH_CANDIDATES = int(os.getenv("SEARCH_CANDIDATES", "20"))
+KEYWORD_WEIGHT = float(os.getenv("KEYWORD_WEIGHT", "1.0"))
+QUERY_STRATEGY = os.getenv("QUERY_STRATEGY", "rewrite")  # none, rewrite, both, expand
+MAX_DISTANCE = float(os.getenv("MAX_DISTANCE", "0.65"))
+# Keyword matches are kept only if closer than this. 2.0 keeps every keyword match (baseline).
+KEYWORD_MAX_DISTANCE = float(os.getenv("KEYWORD_MAX_DISTANCE", "2.0"))

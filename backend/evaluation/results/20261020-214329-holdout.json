@@ -1,0 +1,690 @@
+{
+  "label": "holdout",
+  "settings": {
+    "strategy": "both",
+    "candidates": 20,
+    "keyword_weight": 1.0,
+    "max_distance": 0.65,
+    "keyword_max_distance": 2.0,
+    "modes": [
+      "vector",
+      "keyword",
+      "hybrid"
+    ],
+    "answers": true,
+    "chat_model": "gpt-4.1-mini",
+    "embedding_model": "text-embedding-3-small"
+  },
+  "summary": {
+    "counts": {
+      "answerable": 8,
+      "unanswerable": 2
+    },
+    "modes": {
+      "vector": {
+        "hit@1": 87.5,
+        "hit@5": 100.0,
+        "mrr": 0.938,
+        "kept@5": 100.0,
+        "rejected": 0.0
+      },
+      "keyword": {
+        "hit@1": 75.0,
+        "hit@5": 100.0,
+        "mrr": 0.854,
+        "kept@5": 100.0,
+        "rejected": 0.0
+      },
+      "hybrid": {
+        "hit@1": 100.0,
+        "hit@5": 100.0,
+        "mrr": 1.0,
+        "kept@5": 100.0,
+        "rejected": 0.0
+      }
+    },
+    "by_type": {
+      "vector": {
+        "exact": 100.0,
+        "follow-up": 100.0,
+        "semantic": 100.0
+      },
+      "keyword": {
+        "exact": 100.0,
+        "follow-up": 100.0,
+        "semantic": 100.0
+      },
+      "hybrid": {
+        "exact": 100.0,
+        "follow-up": 100.0,
+        "semantic": 100.0
+      }
+    },
+    "answers": {
+      "answered_with_correct_citation": 100.0,
+      "correctly_refused": 100.0
+    }
+  },
+  "cases": [
+    {
+      "id": "holdout-meeting-times",
+      "type": "semantic",
+      "answerable": true,
+      "question": "What day and time does the class meet in person?",
+      "search_query": "What day and time does the class meet in person?",
+      "queries": [
+        "What day and time does the class meet in person?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.502,
+          "top": [
+            "syllabus p11 vector 0.48",
+            "syllabus p1 vector 0.50",
+            "syllabus p11 vector 0.51",
+            "syllabus p11 vector 0.52",
+            "syllabus p2 vector 0.53"
+          ]
+        },
+        "keyword": {
+          "rank": 3,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.3333333333333333,
+          "kept_hit5": true,
+          "correct_distance": 0.502,
+          "top": [
+            "syllabus p4 keyword 0.63",
+            "syllabus p11 keyword 0.52",
+            "syllabus p1 keyword 0.50",
+            "syllabus p11 keyword 0.55",
+            "syllabus p11 keyword 0.48"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.502,
+          "top": [
+            "syllabus p1 both 0.50",
+            "syllabus p11 both 0.48",
+            "syllabus p11 both 0.52",
+            "syllabus p11 both 0.55",
+            "syllabus p11 both 0.51"
+          ]
+        }
+      },
+      "answer": {
+        "refused": false,
+        "correct_citation": true,
+        "passed": true,
+        "answer": "The class meets in person on Thursdays from 10:00 AM to 11:50 AM [1]."
+      }
+    },
+    {
+      "id": "holdout-financial-aid-census",
+      "type": "semantic",
+      "answerable": true,
+      "question": "I'm on financial aid. What do I need to do in the first two weeks so I don't get dropped?",
+      "search_query": "I'm on financial aid. What do I need to do in the first two weeks so I don't get dropped?",
+      "queries": [
+        "I'm on financial aid. What do I need to do in the first two weeks so I don't get dropped?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.466,
+          "top": [
+            "syllabus p14 vector 0.47",
+            "syllabus p19 vector 0.53",
+            "syllabus p19 vector 0.59",
+            "syllabus p21 vector 0.62",
+            "syllabus p14 vector 0.63"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.466,
+          "top": [
+            "syllabus p14 keyword 0.47",
+            "syllabus p10 keyword 0.73",
+            "syllabus p14 keyword 0.71",
+            "case_3-3_Rafid_Gantt p1 keyword 0.75",
+            "syllabus p19 keyword 0.53"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.466,
+          "top": [
+            "syllabus p14 both 0.47",
+            "syllabus p19 both 0.53",
+            "syllabus p12 both 0.67",
+            "syllabus p12 both 0.67",
+            "syllabus p6 both 0.68"
+          ]
+        }
+      },
+      "answer": {
+        "refused": false,
+        "correct_citation": true,
+        "passed": true,
+        "answer": "If you are on financial aid, you need to \"attend\" all your classes at least once during the first two weeks to avoid being dropped from all of your classes. For online classes, this means you must submit at least one assignment, quiz, or participate in a Canvas discussion; simply viewing the Canvas modules does not count as attendance [1]. Additionally, students in online courses must submit an assignment by the census date (which is the twelfth class day in a regular 16-week semester, or the fourth class day in a short summer semester) to be considered as attending [2]."
+      }
+    },
+    {
+      "id": "holdout-quiz-go-back",
+      "type": "semantic",
+      "answerable": true,
+      "question": "Can I go back and change an answer during a quiz?",
+      "search_query": "Can I go back and change an answer during a quiz?",
+      "queries": [
+        "Can I go back and change an answer during a quiz?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.516,
+          "top": [
+            "syllabus p10 vector 0.52",
+            "syllabus p5 vector 0.53",
+            "syllabus p10 vector 0.53",
+            "syllabus p4 vector 0.55",
+            "syllabus p10 vector 0.61"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.516,
+          "top": [
+            "syllabus p10 keyword 0.53",
+            "syllabus p10 keyword 0.61",
+            "syllabus p10 keyword 0.52",
+            "syllabus p10 keyword 0.76",
+            "syllabus p18 keyword 0.67"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.516,
+          "top": [
+            "syllabus p10 both 0.52",
+            "syllabus p10 both 0.53",
+            "syllabus p10 both 0.61",
+            "syllabus p4 both 0.55",
+            "syllabus p18 both 0.67"
+          ]
+        }
+      },
+      "answer": {
+        "refused": false,
+        "correct_citation": true,
+        "passed": true,
+        "answer": "No, you cannot go back and change your previous answers during a quiz. Once you answer a question, your answer is locked in and the next question appears, with no option to return to earlier questions [2]."
+      }
+    },
+    {
+      "id": "holdout-book-bundle-opt-out",
+      "type": "exact",
+      "answerable": true,
+      "question": "Cougar Book Bundle opt out",
+      "search_query": "Cougar Book Bundle opt out",
+      "queries": [
+        "Cougar Book Bundle opt out"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.433,
+          "top": [
+            "syllabus p3 vector 0.43",
+            "syllabus p3 vector 0.59",
+            "syllabus p3 vector 0.60",
+            "syllabus p19 vector 0.63",
+            "syllabus p21 vector 0.65"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.433,
+          "top": [
+            "syllabus p3 keyword 0.43",
+            "syllabus p3 keyword 0.60",
+            "syllabus p3 keyword 0.59",
+            "syllabus p4 keyword 0.83",
+            "syllabus p5 keyword 0.71"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.433,
+          "top": [
+            "syllabus p3 both 0.43",
+            "syllabus p3 both 0.59",
+            "syllabus p3 both 0.60",
+            "syllabus p10 both 0.69",
+            "syllabus p5 both 0.71"
+          ]
+        }
+      },
+      "answer": {
+        "refused": false,
+        "correct_citation": true,
+        "passed": true,
+        "answer": "You can opt out of the Cougar Book Bundle program for all your classes each term before the census date. If you choose to opt out, you must still have the required books and materials in time to complete your assignments by their due dates, and not having purchased the book will not be accepted as a reason for extensions. The Cougar Book Bundle automatically provides required textbooks, lab manuals, and access codes as a rental package when you register, but opting out is your choice. For more details and how to opt out, you can visit https://www.collin.edu/cougar-book-bundle [1][3]."
+      }
+    },
+    {
+      "id": "holdout-tech-support",
+      "type": "exact",
+      "answerable": true,
+      "question": "eLC technical support phone number",
+      "search_query": "eLC technical support phone number",
+      "queries": [
+        "eLC technical support phone number"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.613,
+          "top": [
+            "syllabus p7 vector 0.61",
+            "syllabus p1 vector 0.68",
+            "syllabus p1 vector 0.70",
+            "syllabus p2 vector 0.74",
+            "syllabus p2 vector 0.74"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.613,
+          "top": [
+            "syllabus p7 keyword 0.61",
+            "syllabus p2 keyword 0.74",
+            "syllabus p7 keyword 0.81",
+            "syllabus p7 keyword 0.77",
+            "syllabus p15 keyword 0.88"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.613,
+          "top": [
+            "syllabus p7 both 0.61",
+            "syllabus p2 both 0.74",
+            "syllabus p7 both 0.77",
+            "case_3-3_Rafid_Gantt p1 both 0.74",
+            "case_3-3_Rafid_Netwo p1 both 0.75"
+          ]
+        }
+      },
+      "answer": {
+        "refused": false,
+        "correct_citation": true,
+        "passed": true,
+        "answer": "The eLC technical support phone numbers are 972-881-5870 and 972-337-1777, option #5 [1]."
+      }
+    },
+    {
+      "id": "holdout-book-meeting",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "Can I schedule a meeting with him instead?",
+      "search_query": "Can I schedule a meeting with the professor instead of attending office hours?",
+      "queries": [
+        "Can I schedule a meeting with him instead?",
+        "Can I schedule a meeting with the professor instead of attending office hours?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.403,
+          "top": [
+            "syllabus p2 vector 0.40",
+            "syllabus p2 vector 0.57",
+            "syllabus p14 vector 0.58",
+            "syllabus p2 vector 0.59",
+            "syllabus p1 vector 0.59"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.403,
+          "top": [
+            "syllabus p2 keyword 0.40",
+            "syllabus p11 keyword 0.63",
+            "syllabus p4 keyword 0.57",
+            "syllabus p1 keyword 0.62",
+            "syllabus p4 keyword 0.70"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.403,
+          "top": [
+            "syllabus p2 both 0.40",
+            "syllabus p1 both 0.62",
+            "syllabus p4 both 0.57",
+            "syllabus p2 both 0.59",
+            "syllabus p2 both 0.57"
+          ]
+        }
+      },
+      "answer": {
+        "refused": false,
+        "correct_citation": true,
+        "passed": true,
+        "answer": "Yes, you can schedule an appointment to speak with the professor using his Bookings website during office hours. If you want to discuss a problem with your code, you should send the code and describe the problem in an email beforehand so he can review it [1]."
+      }
+    },
+    {
+      "id": "holdout-on-time-percentage",
+      "type": "follow-up",
+      "answerable": true,
+      "question": "What percentage do I need to get all of them?",
+      "search_query": "What percentage do I need to get all of the on-time and lab points?",
+      "queries": [
+        "What percentage do I need to get all of them?",
+        "What percentage do I need to get all of the on-time and lab points?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.352,
+          "top": [
+            "syllabus p12 vector 0.35",
+            "syllabus p12 vector 0.39",
+            "syllabus p13 vector 0.41",
+            "syllabus p13 vector 0.55",
+            "syllabus p12 vector 0.48"
+          ]
+        },
+        "keyword": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.352,
+          "top": [
+            "syllabus p12 keyword 0.35",
+            "syllabus p4 keyword 0.60",
+            "syllabus p12 keyword 0.39",
+            "syllabus p13 keyword 0.41",
+            "syllabus p12 keyword 0.48"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.352,
+          "top": [
+            "syllabus p12 both 0.35",
+            "syllabus p12 both 0.39",
+            "syllabus p13 both 0.41",
+            "syllabus p12 both 0.48",
+            "syllabus p13 both 0.55"
+          ]
+        }
+      },
+      "answer": {
+        "refused": false,
+        "correct_citation": true,
+        "passed": true,
+        "answer": "You need to earn at least 75% of all possible on-campus On-Time + Lab Practice scores to get the full 5 points toward your final grade. This means being on time and submitting the in-class lab work for at least 75% of the classes [1][2]."
+      }
+    },
+    {
+      "id": "holdout-go-live",
+      "type": "semantic",
+      "answerable": true,
+      "question": "When does the new intranet system go live?",
+      "search_query": "When does the new intranet system go live?",
+      "queries": [
+        "When does the new intranet system go live?"
+      ],
+      "modes": {
+        "vector": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.421,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 vector 0.42",
+            "case_3-3_Rafid_Netwo p1 vector 0.52",
+            "case_3-3_Rafid_Gantt p1 vector 0.54",
+            "case_3-3_Rafid_Netwo p1 vector 0.54",
+            "case_3-3_Rafid_Gantt p1 vector 0.58"
+          ]
+        },
+        "keyword": {
+          "rank": 2,
+          "hit1": false,
+          "hit5": true,
+          "rr": 0.5,
+          "kept_hit5": true,
+          "correct_distance": 0.421,
+          "top": [
+            "syllabus p5 keyword 0.74",
+            "case_3-3_Rafid_Gantt p1 keyword 0.59",
+            "case_3-3_Rafid_Netwo p1 keyword 0.52",
+            "case_3-3_Rafid_Netwo p1 keyword 0.42",
+            "case_3-3_Rafid_Netwo p1 keyword 0.54"
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "hit1": true,
+          "hit5": true,
+          "rr": 1.0,
+          "kept_hit5": true,
+          "correct_distance": 0.421,
+          "top": [
+            "case_3-3_Rafid_Netwo p1 both 0.42",
+            "case_3-3_Rafid_Netwo p1 both 0.52",
+            "case_3-3_Rafid_Gantt p1 both 0.59",
+            "case_3-3_Rafid_Gantt p1 both 0.54",
+            "case_3-3_Rafid_Netwo p1 both 0.54"
+          ]
+        }
+      },
+      "answer": {
+        "refused": false,
+        "correct_citation": true,
+        "passed": true,
+        "answer": "The new intranet system goes live on March 4, 2027 [2][3][5]."
+      }
+    },
+    {
+      "id": "holdout-prerequisites",
+      "type": "unanswerable",
+      "answerable": false,
+      "question": "Are there any prerequisite courses I need before taking this class?",
+      "search_query": "Are there any prerequisite courses I need before taking this class?",
+      "queries": [
+        "Are there any prerequisite courses I need before taking this class?"
+      ],
+      "modes": {
+        "vector": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.497,
+          "best_keyword_distance": null,
+          "top": [
+            "syllabus p6 vector 0.50",
+            "syllabus p1 vector 0.54",
+            "syllabus p4 vector 0.55",
+            "syllabus p21 vector 0.57",
+            "syllabus p9 vector 0.58"
+          ]
+        },
+        "keyword": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.552,
+          "best_keyword_distance": 0.552,
+          "top": [
+            "syllabus p4 keyword 0.65",
+            "syllabus p4 keyword 0.55",
+            "syllabus p11 keyword 0.64",
+            "syllabus p12 keyword 0.67",
+            "syllabus p14 keyword 0.61"
+          ]
+        },
+        "hybrid": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.552,
+          "best_keyword_distance": 0.552,
+          "top": [
+            "syllabus p4 both 0.55",
+            "syllabus p14 both 0.61",
+            "syllabus p14 both 0.62",
+            "syllabus p11 both 0.64",
+            "syllabus p11 both 0.60"
+          ]
+        }
+      },
+      "answer": {
+        "refused": true,
+        "correct_citation": false,
+        "passed": true,
+        "answer": "I couldn't find that in your documents."
+      }
+    },
+    {
+      "id": "holdout-zybooks-price",
+      "type": "unanswerable",
+      "answerable": false,
+      "question": "How much does the zyBooks subscription cost?",
+      "search_query": "How much does the zyBooks subscription cost?",
+      "queries": [
+        "How much does the zyBooks subscription cost?"
+      ],
+      "modes": {
+        "vector": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.547,
+          "best_keyword_distance": null,
+          "top": [
+            "syllabus p3 vector 0.55",
+            "syllabus p5 vector 0.55",
+            "syllabus p4 vector 0.58",
+            "syllabus p10 vector 0.59",
+            "syllabus p5 vector 0.63"
+          ]
+        },
+        "keyword": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.553,
+          "best_keyword_distance": 0.553,
+          "top": [
+            "syllabus p5 keyword 0.55",
+            "syllabus p4 keyword 0.58",
+            "syllabus p5 keyword 0.68",
+            "syllabus p5 keyword 0.63",
+            "syllabus p6 keyword 0.68"
+          ]
+        },
+        "hybrid": {
+          "rejected": false,
+          "kept": 5,
+          "best_distance": 0.553,
+          "best_keyword_distance": 0.553,
+          "top": [
+            "syllabus p5 both 0.55",
+            "syllabus p4 both 0.58",
+            "syllabus p5 both 0.63",
+            "syllabus p10 both 0.59",
+            "syllabus p5 both 0.68"
+          ]
+        }
+      },
+      "answer": {
+        "refused": true,
+        "correct_citation": false,
+        "passed": true,
+        "answer": "I couldn't find that in your documents."
+      }
+    }
+  ]
+}

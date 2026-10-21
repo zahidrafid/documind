@@ -6,7 +6,7 @@ from pgvector.django import CosineDistance
 
 from documents.models import Chunk, Document
 
-from .openai_client import chat, embed_texts
+from .openai_client import chat, chat_json, embed_texts
 
 SYSTEM_PROMPT = """You are DocuMind, an assistant that answers questions using ONLY the numbered sources provided.
 
@@ -21,14 +21,42 @@ NOT_FOUND_MESSAGE = "I couldn't find that in your documents."
 
 REWRITE_PROMPT = """You rewrite follow-up questions so they can be understood without the conversation.
 
-Given the conversation so far and a follow-up question, rewrite the follow-up as one standalone question that includes any names, topics or details it refers to.
-- If the question is already standalone, return it unchanged.
-- Do not answer the question.
-- Return only the rewritten question, nothing else."""
+Only add context when the question depends on the conversation, for example when it uses words like "it", "that", "this", "they", "those", "too" or "also", or starts with "what about". If the question already makes sense on its own, return it exactly as written.
 
+Examples:
+Conversation about the late work policy. Question: "Does that apply to the final project too?"
+Rewritten: "Does the late work policy apply to the final project?"
+
+Conversation about the late work policy. Question: "Who is the instructor?"
+Rewritten: "Who is the instructor?"
+
+Conversation about the AI use policy. Question: "How many credit hours is this course?"
+Rewritten: "How many credit hours is this course?"
+
+Do not answer the question. Return only the question, nothing else."""
+
+EXPAND_PROMPT = """You help a search engine find passages in a user's documents.
+
+Given the conversation (if any) and the user's latest question, return JSON in this shape:
+{"standalone": "...", "alternatives": ["...", "..."]}
+
+- "standalone": the question rewritten so it makes sense without the conversation. Only add context if the question refers to something earlier (words like "it", "that", "this", "they", "too", "also", or "what about"). Otherwise copy it exactly.
+- "alternatives": two short rephrasings that use different words a document might use instead: synonyms, formal terms, or form labels. For example, "instructor" might appear in a document as "professor" or "faculty name", and "late work" as "late submissions".
+
+Return only the JSON."""
+
+RRF_K = 60
+SEARCH_MODES = ("vector", "keyword", "hybrid")
+QUERY_STRATEGIES = ("none", "rewrite", "both", "expand")
+
+# Keeps emails, course codes and room numbers whole:
+# "jlewis@collin.edu", "ITSE-1359", "111A"
+TOKEN_PATTERN = re.compile(r"[\w.@+-]*\w")
+
+
+# ---------- Query building ----------
 
 def format_history(history, max_chars=600):
-    """Turn [{"role": ..., "content": ...}] into readable text for a prompt."""
     lines = []
     for message in history:
         speaker = "User" if message["role"] == "user" else "Assistant"
@@ -40,9 +68,8 @@ def format_history(history, max_chars=600):
 
 
 def rewrite_question(question, history):
-    """Turn a follow-up into a standalone question for searching."""
     if not history:
-        return question  # first question: nothing to rewrite, skip the API call
+        return question
     user_message = (
         f"Conversation so far:\n{format_history(history)}\n\n"
         f"Follow-up question: {question}"
@@ -50,14 +77,53 @@ def rewrite_question(question, history):
     rewritten = chat(REWRITE_PROMPT, user_message).strip().strip('"')
     return rewritten or question
 
-CANDIDATES_PER_METHOD = 20  # how many results each search method contributes
-RRF_K = 60  # standard Reciprocal Rank Fusion constant
-MAX_DISTANCE = 0.65
-SEARCH_MODES = ("vector", "keyword", "hybrid")
 
+def expand_question(question, history):
+    history_text = f"Conversation so far:\n{format_history(history)}\n\n" if history else ""
+    data = chat_json(EXPAND_PROMPT, f"{history_text}Latest question: {question}")
+    standalone = str(data.get("standalone") or question).strip()
+    alternatives = [
+        str(item).strip() for item in data.get("alternatives", []) if str(item).strip()
+    ][:3]
+    return standalone, alternatives
+
+
+def _unique(queries):
+    seen, result = set(), []
+    for query in queries:
+        key = query.strip().lower()
+        if key and key not in seen:
+            seen.add(key)
+            result.append(query.strip())
+    return result
+
+
+def build_queries(question, history, strategy=None):
+    """Return (queries, search_query).
+
+    queries       every phrasing to search with
+    search_query  the main standalone question (shown as "Searched for" in the UI)
+    """
+    strategy = strategy or settings.QUERY_STRATEGY
+    if strategy not in QUERY_STRATEGIES:
+        raise ValueError(f"Unknown query strategy: {strategy}")
+
+    if strategy == "none":
+        return [question], question
+
+    if strategy == "expand":
+        standalone, alternatives = expand_question(question, history)
+        return _unique([question, standalone, *alternatives]), standalone
+
+    standalone = rewrite_question(question, history)
+    if strategy == "rewrite":
+        return [standalone], standalone
+    return _unique([question, standalone]), standalone  # "both"
+
+
+# ---------- Search ----------
 
 def _user_chunks(user, document_ids):
-    """Chunks the user is allowed to search."""
     chunks = Chunk.objects.filter(
         document__owner=user,
         document__status=Document.Status.READY,
@@ -68,16 +134,11 @@ def _user_chunks(user, document_ids):
 
 
 def _keyword_query(question):
-    """Match chunks containing ANY of the question's words.
-
-    Requiring ALL words would be too strict for natural questions.
-    Chunks matching more words still rank higher.
-    Common words like "what" and "the" are ignored automatically.
-    """
-    words = re.findall(r"\w+", question.lower())[:30]
+    """OR together the question's terms. Common words are ignored by Postgres."""
+    tokens = TOKEN_PATTERN.findall(question.lower())[:30]
     query = None
-    for word in words:
-        term = SearchQuery(word, search_type="plain", config="english")
+    for token in tokens:
+        term = SearchQuery(token, search_type="plain", config="english")
         query = term if query is None else query | term
     return query
 
@@ -103,9 +164,20 @@ def _keyword_search(chunks, question, question_vector, limit):
     )
 
 
-def is_relevant(chunk, max_distance=MAX_DISTANCE):
-    """Close in meaning, or contains the question's words."""
-    return chunk.distance <= max_distance or chunk.match in ("keyword", "both")
+def _methods(match):
+    return {"vector", "keyword"} if match == "both" else {match}
+
+
+def _finalize(scores, found_by, by_id, top_k):
+    best_ids = sorted(scores, key=scores.get, reverse=True)[:top_k]
+    results = []
+    for chunk_id in best_ids:
+        chunk = by_id[chunk_id]
+        methods = found_by[chunk_id]
+        chunk.match = "both" if len(methods) == 2 else next(iter(methods))
+        chunk.score = scores[chunk_id]
+        results.append(chunk)
+    return results
 
 
 def search_chunks(
@@ -115,18 +187,15 @@ def search_chunks(
     document_ids=None,
     mode=None,
     question_vector=None,
-    candidates=CANDIDATES_PER_METHOD,
+    candidates=None,
+    keyword_weight=None,
 ):
-    """Return the best chunks for a question, best first.
-
-    Each chunk gets extra attributes:
-      distance  cosine distance to the question (lower = more similar)
-      match     "vector", "keyword" or "both"
-      score     fused ranking score
-    """
+    """Search with one phrasing. Returns chunks with .distance, .match and .score."""
     mode = mode or settings.SEARCH_MODE
     if mode not in SEARCH_MODES:
         raise ValueError(f"Unknown search mode: {mode}")
+    candidates = candidates or settings.SEARCH_CANDIDATES
+    keyword_weight = settings.KEYWORD_WEIGHT if keyword_weight is None else keyword_weight
 
     chunks = _user_chunks(user, document_ids)
     if question_vector is None:
@@ -138,61 +207,111 @@ def search_chunks(
     if mode in ("keyword", "hybrid"):
         result_lists["keyword"] = _keyword_search(chunks, question, question_vector, candidates)
 
-    # Reciprocal Rank Fusion: score = sum of 1 / (k + position) across lists
+    # Weighted Reciprocal Rank Fusion
+    weights = {"vector": 1.0, "keyword": keyword_weight}
     scores, found_by, by_id = {}, {}, {}
     for method, results in result_lists.items():
         for position, chunk in enumerate(results, start=1):
-            scores[chunk.id] = scores.get(chunk.id, 0) + 1 / (RRF_K + position)
+            scores[chunk.id] = scores.get(chunk.id, 0) + weights[method] / (RRF_K + position)
             found_by.setdefault(chunk.id, set()).add(method)
             by_id.setdefault(chunk.id, chunk)
 
-    best_ids = sorted(scores, key=scores.get, reverse=True)[:top_k]
+    return _finalize(scores, found_by, by_id, top_k)
 
-    results = []
-    for chunk_id in best_ids:
-        chunk = by_id[chunk_id]
-        methods = found_by[chunk_id]
-        chunk.match = "both" if len(methods) == 2 else next(iter(methods))
-        chunk.score = scores[chunk_id]
-        results.append(chunk)
-    return results
 
+def retrieve(
+    queries,
+    user,
+    top_k=5,
+    document_ids=None,
+    mode=None,
+    candidates=None,
+    keyword_weight=None,
+    vectors=None,
+):
+    """Search with one or more phrasings and fuse the results."""
+    if vectors is None:
+        vectors = embed_texts(queries)  # one API call for all phrasings
+    options = {
+        "document_ids": document_ids,
+        "mode": mode,
+        "candidates": candidates,
+        "keyword_weight": keyword_weight,
+    }
+
+    if len(queries) == 1:
+        return search_chunks(queries[0], user, top_k=top_k, question_vector=vectors[0], **options)
+
+    pool = candidates or settings.SEARCH_CANDIDATES
+    scores, found_by, by_id = {}, {}, {}
+    for query, vector in zip(queries, vectors):
+        results = search_chunks(query, user, top_k=pool, question_vector=vector, **options)
+        for position, chunk in enumerate(results, start=1):
+            scores[chunk.id] = scores.get(chunk.id, 0) + 1 / (RRF_K + position)
+            found_by.setdefault(chunk.id, set()).update(_methods(chunk.match))
+            # Keep the copy with the best (smallest) distance across phrasings
+            current = by_id.get(chunk.id)
+            if current is None or chunk.distance < current.distance:
+                by_id[chunk.id] = chunk
+
+    return _finalize(scores, found_by, by_id, top_k)
+
+
+def is_relevant(chunk, max_distance=None, keyword_max_distance=None):
+    max_distance = settings.MAX_DISTANCE if max_distance is None else max_distance
+    keyword_max_distance = (
+        settings.KEYWORD_MAX_DISTANCE if keyword_max_distance is None else keyword_max_distance
+    )
+    if chunk.distance <= max_distance:
+        return True
+    return chunk.match in ("keyword", "both") and chunk.distance <= keyword_max_distance
+
+
+# ---------- Answering ----------
 
 def answer_question(
     question,
     user,
     history=None,
     top_k=5,
-    max_distance=MAX_DISTANCE,
     document_ids=None,
     mode=None,
-    rewrite=True,
+    strategy=None,
+    candidates=None,
+    keyword_weight=None,
+    max_distance=None,
+    keyword_max_distance=None,
 ):
     history = history or []
-    search_query = rewrite_question(question, history) if rewrite else question
+    queries, search_query = build_queries(question, history, strategy)
 
-    chunks = search_chunks(
-        search_query, user, top_k=top_k, document_ids=document_ids, mode=mode
+    chunks = retrieve(
+        queries,
+        user,
+        top_k=top_k,
+        document_ids=document_ids,
+        mode=mode,
+        candidates=candidates,
+        keyword_weight=keyword_weight,
     )
-
-    # Keep chunks that are close in meaning OR contain the question's words.
-    # A chunk with an exact course code may not be close in meaning, but it's relevant.
-    relevant = [chunk for chunk in chunks if is_relevant(chunk, max_distance)]
+    relevant = [
+        chunk for chunk in chunks if is_relevant(chunk, max_distance, keyword_max_distance)
+    ]
     if not relevant:
-        return {"answer": NOT_FOUND_MESSAGE, "sources": [], "search_query": search_query}
+        return {
+            "answer": NOT_FOUND_MESSAGE,
+            "sources": [],
+            "search_query": search_query,
+            "queries": queries,
+        }
 
     context = "\n\n".join(
         f"[{number}] {chunk.document.title}, page {chunk.page_number}:\n{chunk.text}"
         for number, chunk in enumerate(relevant, start=1)
     )
-
-    history_text = (
-        f"Conversation so far:\n{format_history(history)}\n\n" if history else ""
-    )
+    history_text = f"Conversation so far:\n{format_history(history)}\n\n" if history else ""
     question_text = (
-        question
-        if search_query == question
-        else f"{question}\n(Interpreted as: {search_query})"
+        question if search_query == question else f"{question}\n(Interpreted as: {search_query})"
     )
     user_message = f"{history_text}Sources:\n{context}\n\nQuestion: {question_text}"
     answer = chat(SYSTEM_PROMPT, user_message)
@@ -209,4 +328,9 @@ def answer_question(
         }
         for number, chunk in enumerate(relevant, start=1)
     ]
-    return {"answer": answer, "sources": sources, "search_query": search_query}
+    return {
+        "answer": answer,
+        "sources": sources,
+        "search_query": search_query,
+        "queries": queries,
+    }
